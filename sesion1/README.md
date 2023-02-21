@@ -1,6 +1,2 @@
-# Sesión de laboratorio 1
-
-## Objetivos
-
-## Descripción
+# Sesión 1 - Introducción al Arduino UNO
 
