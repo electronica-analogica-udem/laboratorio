@@ -6,7 +6,6 @@
 > * Identificar los diferentes elementos de hardware basico en la implementación de circuitos digitales.
 > * Codificar programas para placas Arduino que hagan uso entradas y salidas digitales.
 > * Emplear la comunicación serial como medio para hacer depuración en sistemas digitales.
->
 
 ## Hardware
 
