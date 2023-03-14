@@ -1,4 +1,4 @@
-# Sesion 4 - Leds y display de siete segmentos
+# Sesion 4 - Led y display de siete segmentos
 
 **Fecha**: 14/03/2023
 
