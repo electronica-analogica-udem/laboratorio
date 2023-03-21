@@ -115,6 +115,8 @@ Existen dos tipos de display de 7 segmentos:
 
 ### Arduino y display de siete segmentos
 
+Antes de continuar lleve a cabo las instrucciones dadas en el siguiente [link](ejemplo_por_pasos/README.md)
+
 #### Ejemplo 1
 
 En el siguiente ejemplo se muestra un display de siete segmentos de Anodo común conectado a un arduino. El programa que ejecuta el arduino se encarga implementar un contador que cuenta desde 0 hasta 9 de manera que se despliega el valor en el display. La siguiente figura muestra el circuito asociado:
