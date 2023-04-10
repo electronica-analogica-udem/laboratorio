@@ -1,4 +1,22 @@
-# Ejemplo por pasos
+# Botones y debounce
+
+## Debounce
+
+Los interruptores fisicos se suelen usar con frecuencia como entradas en sistemas electronicos para inficar el cambio de una señal. Cuando un interruptor se cierra o se abre, el contacto entre los bordes permite el cambio de estado de la señal (de HIGH a LOW o viceversa). Desde el punto de vista ideal, lo que se esperaria este cambio de voltaje en la señal fuera limpio; sin embargo, en realidad durante la transición del cambio de voltaje aparecen impulsos (falsas pulsaciones) debido al rebote (**bounce**) de los contactos mecanicos del switch(tal y como se muestra en siguiene figura tomada del siguiente [link](https://microchipdeveloper.com/xpress:code-free-switch-debounce-using-tmr2-with-hlt))
+
+![rebote](rebote.jpg)
+
+Visto desde un osciloscopio, el efecto de los rebotes se muestra a continuación:
+
+![rebote_osciloscopio](rebote_osciloscopio.jpg)
+
+Los rebotes son considerados ruido y por lo tanto son indeseados, por lo tanto estos deben ser eliminados de la señal antes de que esta sea leida. El proceso de eliminarlos se conoce como **Debounce** (o **Switch debounce**) y el objetivo de este proceso es tener la señal estable (sin ruido) antes de ser leida tal y como se muestra a continuación.
+
+![debounce](debounce.jpg)
+
+Para comprender mas sobre el debounce, vaya al siguiente link [Understanding Switch Bounce (and How to Debounce)](https://blog.adafruit.com/2022/01/18/understanding-switch-bounce-and-how-to-debounce/).
+
+Es importante mencionar que el rebote no ocurre cuando el boton permance presionado o no; este, solo ocurre durante el proceso de precionado o liberacion del boton. El proceso de **Debounce** puede hacerse por medio de Hardware o por medio de software. A lo largo de esta guia estudiaremos como hacer este procedimiento por software mediante el analisis de unos cuantos programas mostrados a continuación.
 
 ## Circuito 1
 
@@ -123,6 +141,13 @@ void loop() {
   lastButtonState = reading;
 }
 ```
+
+
+Aca vamos
+
+
+-------
+
 
 
 ### Codigo 3 - Contador con STOP y RUN
@@ -320,3 +345,9 @@ void hola() {
 2. https://hetpro-store.com/TUTORIALES/push-button-con-arduino-digitalread/
 3. https://www.programmingelectronics.com/debouncing-a-button-with-arduino/
 4. https://docs.arduino.cc/built-in-examples/digital/Debounce
+5. https://my.eng.utah.edu/~cs5780/debouncing.pdf
+6. https://my.eng.utah.edu/~cs5780/
+7. https://www2.keil.com/docs/default-source/default-document-library/software-based-finite-state-machine-(fsm)-with-general-purpose-processorsf4f837f788736c26abc1ff00001d2c02.pdf
+8. https://learn.sparkfun.com/tutorials/sparkfun-inventors-kit-experiment-guide---v41/circuit-2a-buzzer
+9. https://learn.adafruit.com/make-it-switch/debouncing
+10. https://microchipdeveloper.com/xpress:code-free-switch-debounce-using-tmr2-with-hlt
