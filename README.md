@@ -8,3 +8,4 @@ La siguiente tabla muestra las actividades de laboratorio por semana:
 |2| Sesión 2 - Manejo de entradas y salidas digitales|21/02/2023|Guia sesión 2 ([link](./sesion2/README.md))|
 |3| Sesión 3 - Manejo de una fotocelda|07/03/2023|Guia sesión 3 ([link](./sesion3/README.md))|
 |4| Sesión 4 - Led y display de siete segmentos|14/03/2023|Guia sesión 4 ([link](./sesion4/README.md))|
+|5| Sesión 5 - Botones y debounce|11/04/2023|Guia sesión 5 ([link](./sesion5/README.md))|

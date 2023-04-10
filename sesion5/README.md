@@ -18,7 +18,9 @@ Para comprender mas sobre el debounce, vaya al siguiente link [Understanding Swi
 
 Es importante mencionar que el rebote no ocurre cuando el boton permance presionado o no; este, solo ocurre durante el proceso de precionado o liberacion del boton. El proceso de **Debounce** puede hacerse por medio de Hardware o por medio de software. A lo largo de esta guia estudiaremos como hacer este procedimiento por software mediante el analisis de unos cuantos programas mostrados a continuación.
 
-## Circuito 1
+## Ejemplos
+
+### Circuito 1 - Contador empleando un pulsador
 
 Montar el siguiente circuito:
 
@@ -26,7 +28,7 @@ Montar el siguiente circuito:
 
 Despues de montado, implementar los siguientes tres códigos y mirar como funcionan:
 
-### Codigo 1 - Contador con debounce
+#### Codigo 1 - Contador con rebote
 
 En el siguiente [link](https://www.tinkercad.com/things/i1HxflPgGVp) se puede ver la simulación, sin embargo montelo y observe que sucede:
 
@@ -74,7 +76,7 @@ void loop() {
 }
 ```
 
-### Codigo 2 - Contador con anti-debounce
+#### Codigo 2 - Contador con anti-rebote
 
 En el siguiente [link](https://www.tinkercad.com/things/fobxpIDyz92) se puede ver la simulación. Sin embargo, en este ejemplo se puede ver la solución al problema que se dio en el montaje del ejemplo anterior:
 
@@ -142,15 +144,7 @@ void loop() {
 }
 ```
 
-
-Aca vamos
-
-
--------
-
-
-
-### Codigo 3 - Contador con STOP y RUN
+#### Codigo 3 - Contador con STOP y RUN
 
 Entienga el código que se muestra a continuación ([simulación](https://www.tinkercad.com/things/8qRU1D5HY6t)):
 
@@ -237,13 +231,13 @@ void loop() {
 }
 ```
 
-## Circuito 2
+### Circuito 2 - Contador con display
 
 Se tiene el siguiente circuito:
 
 ![ejemplo](display7seg_solution.png)
 
-El circuito se encuentra el siguiente [enlace](https://www.tinkercad.com/things/hCeCtnalDjR). Copie el link en sus proyectos de tinkercad y empiece codificando el programa que se muestra a continuación (codificado previamente en una clase): 
+El circuito se encuentra el siguiente [enlace](https://www.tinkercad.com/things/hCeCtnalDjR). Copie el link en sus proyectos de tinkercad y empiece codificando el programa que se muestra a continuación (codificado previamente en una clase) de tal manera que implemente un contador de 0 a 9 que aumente cada 1 segundo.
 
 ```ino
 /*
@@ -328,16 +322,12 @@ int suma(int x, int y) {
   return s;
 }
 
-
-void hola() {
-  
+void hola() {  
   Serial.print("Contador = ");
   Serial.println(cnt);
 
-
 }
 ```
-
 
 ## Referencias
 
