@@ -142,7 +142,11 @@ Desarrollar un programa que imprima en el puerto serial el valor de un contador 
   * **switch 1**: En **ON** permite el incremento o disminución del contador, en **OFF** detiene el conteo.
   * **switches 2**: Si esta en **OFF** el contador se incrementa, si esta en **ON** el contador decrementa.
 
-**Solución**:
+El circuito en el que se implementara este sistema se muestra a continuación:
+
+![circuito](circuito_FSM.png)
+
+**Solución**: Antes de empezar a codificar el programa vamos a tener en cuenta el siguiente planteamiento:
 
 1. **Entradas**:
    
@@ -151,13 +155,28 @@ Desarrollar un programa que imprima en el puerto serial el valor de un contador 
    |1|```RESET```|Detiene y reinicia el contador cuando es colocada en ```HIGH```|
    |2|```SW1```|Si esta en ```HIGH``` permite que el contador cambie, si esta en ```LOW```, el contador permanecera en el mismo valor|
    |3|```SW2```|Si esta en ```LOW``` el contador se incrementa, si esta en ```HIGH```, el contador disminuye|
-   
+
+   En el programa el codigo asociado a estas entradas se muestra a continuación:
+
+   ```ino
+   // Entradas
+   #define RESET 3
+   #define SW1 9
+   #define SW2 8
+   ```
 
 2. **Salidas**:
    
    |#|Salida|Valores|
    |---|---|---|
    |1|```cnt```| Variable que se imprime serialmente dentro del rango 0 - 19. Esta cambia de acuerdo al valor de las entradas definidas anteriormente|
+
+   La variable asociada a la salida se muestra a continuación:
+
+   ```ìno
+   // Variable para el contador
+   int cnt = 0;
+   ```
 
 3. **Estados**:
 
@@ -167,6 +186,16 @@ Desarrollar un programa que imprima en el puerto serial el valor de un contador 
    |2|```PAUSE```|Estado que indica que el sistema tiene el contador ```cnt``` encuentra pausado|
    |3|```UP```| Estado el cual el contador se encuentra incrementandose ```cnt = cnt + 1```|
    |4|```DOWN```|Estado en el que el contador disminuye ```cnt = cnt - 1```|
+
+   En este caso, las constantes asociadas a los estados se muestra a continuación:
+
+   ```ìno
+   // Definicion de los estados
+   #define INIT 1
+   #define PAUSE 2
+   #define UP 3
+   #define DOWN 4
+   ```
 
 4. **Transiciones**:
 
@@ -184,13 +213,25 @@ Desarrollar un programa que imprima en el puerto serial el valor de un contador 
    |```UP```|```SW1 = 0```|```PAUSE```|
    |```UP```|```RESET = 1```|```INIT```|
 
+   Para poder realizar las transiciones, es necesario conocer el valor que toman las entradas y los estados asociados. Para esto se empleran las siguientes variables asociadas al estado actual y a los valores que tienen las entradas cuando son leidos:
+
+   ```ìno
+   // Variable empleada para el estado actual
+   int state;
+
+   // Variables asociadas a las entradas
+   int reset_value;
+   int sw1_value;
+   int sw2_value;
+   ```
+
 5. **Diagrama de estados**:
+
+A partir de la tabla de transición se construye el diagrama de estados el cual se muestra en la siguiente figura:
 
 ![diagrama_FSM_example1](diagrama_example1.png)
 
-
-
-
+Para mas claridad, observemos los fragmentos de codigo asociados a las transiciones que parten desde cada estado:
 
 
 
