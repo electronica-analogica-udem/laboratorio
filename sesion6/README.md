@@ -227,11 +227,43 @@ El circuito en el que se implementara este sistema se muestra a continuación:
 
 5. **Diagrama de estados**:
 
-A partir de la tabla de transición se construye el diagrama de estados el cual se muestra en la siguiente figura:
+   A partir de la tabla de transición se construye el diagrama de estados el cual se muestra en la siguiente figura:
 
-![diagrama_FSM_example1](diagrama_example1.png)
+   ![diagrama_FSM_example1](diagrama_example1.png)
 
-Para mas claridad, observemos los fragmentos de codigo asociados a las transiciones que parten desde cada estado:
+   Para mas claridad, observemos los fragmentos de codigo asociados a cada uno de los estados y sus transiciones:
+
+   * **Estado INIT**: La parte de la tabla donde el estado actual es **INIT**, se muestra a continuación:
+  
+     |Estado actual|Entradas|Siguiente estado|
+     |---|---|---|
+     |```INIT```|```RESET = 1```|```INIT```|
+     |```INIT```|```RESET = 0```, ```SW1 = 0```|```PAUSE```|
+     |```INIT```|```RESET = 0```, ```SW1 = 1```,```SW2 = 0```|```UP```|
+     |```INIT```|```RESET = 0``` , ```SW1 = 1```,```SW2 = 1```|```LOW```|
+
+     El fragmento de codigo asociado a este estado de muestra a continuación:
+
+     ```ìno
+     case INIT:
+       // Reinicio del contador
+       cnt = 0;      
+
+       // Transiciones desde el estado INIT      
+       if(reset_value == LOW && sw1_value == LOW) {
+          // INIT -> PAUSE
+          state = PAUSE;    
+       }
+       else if(reset_value == LOW && sw1_value == HIGH && SW2 == LOW) {
+          // INIT -> UP
+          state = UP;    
+       }
+       else if(reset_value == LOW && sw1_value == HIGH && SW2 == HIGH) {
+          // INIT -> DOWN
+          state = DOWN;    
+       }    
+       break;
+     ```
 
 
 
