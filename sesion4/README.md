@@ -308,6 +308,17 @@ El diagrama de conexión se muestra a continuación:
 
 ![contador1](contador1.png)
 
+## Actividad
+
+Usando un MCU Arduino y dos display de 7 segmentos implemente un contador de **Incremento/decremento** de 00 a 99.
+
+El contador se controla mediante tres señales digitales:
+* Un botón de **Comienzo/Parada**
+* Un botón de **Reinicio** 
+* Un switch de **Incremento/Decremento**.
+
+
+
 ## Referencias
 
 1. Arduino Libraries ([link](https://learn.adafruit.com/adafruit-all-about-arduino-libraries-install-use/arduino-libraries))
