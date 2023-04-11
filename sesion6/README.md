@@ -489,6 +489,28 @@ void loop() {
 }
 ```
 
+## Actividad de refuerzo
+
+Una empresa le pide diseñar un controlador controlador de semáforo para controlar el trafico en una intersección entre dos caminos:
+
+![semaforo](semaforo.png)
+
+Al realizar el estudio uste propone una implemeción en Arduino empleando una Maquina de estados. Con el objetivo de maximizar el flujo de tráfico, minimizar el tiempo de espera en un semáforo en rojo y evitar accidentes usted propone un diseño el cual tiene contiene los siguientes elementos:
+* Dos sensores de carros colocados en las carreteras **North** y **East**. Las salidas de los sensores se resumen en la siguiente tabla (Para simular estos use un dipswitch):
+
+  |Salida|Descripción|
+  |---|---|
+  |00|Significa que no hay carros en ninguna de las carreteras|
+  |01|Significa que hay carros en la carretera **East**|
+  |10|Significa que hay carros en las carretera **North**|
+  |11|Significa que hay carros ambas carreteras|
+
+* Dos semaforos cuyas salidas dependen de los estados y debera tener en cuenta los siguientes criterios:
+  * Cuando hay carros en una de las carreteras, el semaforo asociado a la via con carros debera estar en verde todo el tiempo.
+  * Cuando hay carros en ambas carreteras, los semaforo cambiaran para controlar el trafico entre las vias. 
+  * Cuando no hay carros en ninguna de las carreteras los semaforos permaneceran en amarillo indicando precaución. 
+
+
 ### Referencias
 
 1. https://www.norwegiancreations.com/2017/03/state-machines-and-arduino-implementation/
