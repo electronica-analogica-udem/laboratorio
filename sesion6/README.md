@@ -126,7 +126,7 @@ void loop() {
 Antes de empezar a codificar el problema es necesario definir la maquina de estados asociada a este lo cual, para ello es bueno tener en cuenta los siguientes pasos:
 1. Definir las entradas y su efecto en el sistema.
 2. Definir las salidas y sus posibles valores.
-3. Definir los estados en los cuales se tenga una clara asociación entre un conjunto de entradas y un conjunto de salidas deseados.
+3. Definir los estados en los cuales se tenga una clara asociación entre un conjunto de entradas y un conjunto de salidas deseados y de lo que se espera que haga el sistema en cada estado en cuestion.
 4. Definir las transiciones entre los estados de tal manera que se conecten adecuadamente los estados de interes de acuerdo a los valores de la señal de entrada.
 5. Dibujar el diagrama de estados.
 
@@ -173,7 +173,7 @@ El circuito en el que se implementara este sistema se muestra a continuación:
 
    La variable asociada a la salida se muestra a continuación:
 
-   ```ìno
+   ```ino
    // Variable para el contador
    int cnt = 0;
    ```
@@ -189,7 +189,7 @@ El circuito en el que se implementara este sistema se muestra a continuación:
 
    En este caso, las constantes asociadas a los estados se muestra a continuación:
 
-   ```ìno
+   ```ino
    // Definicion de los estados
    #define INIT 1
    #define PAUSE 2
@@ -204,18 +204,20 @@ El circuito en el que se implementara este sistema se muestra a continuación:
    |```INIT```|```RESET = 1```|```INIT```|
    |```INIT```|```RESET = 0```, ```SW1 = 0```|```PAUSE```|
    |```INIT```|```RESET = 0```, ```SW1 = 1```,```SW2 = 0```|```UP```|
-   |```INIT```|```RESET = 0``` , ```SW1 = 1```,```SW2 = 1```|```LOW```|
+   |```INIT```|```RESET = 0``` , ```SW1 = 1```,```SW2 = 1```|```DOWN```|
    |```PAUSE```|```SW1 = 1```,```SW2 = 0```|```UP```|
-   |```PAUSE```|```SW1 = 1```,```SW2 = 1```|```LOW```|
+   |```PAUSE```|```SW1 = 1```,```SW2 = 1```|```DOWN```|
    |```PAUSE```|```RESET = 1```|```INIT```|
-   |```LOW```|```SW1 = 0```|```PAUSE```|
-   |```LOW```|```RESET = 1```|```INIT```|
+   |```DOWN```|```SW1 = 0```|```PAUSE```|
+   |```DOWN```|```SW1 = 1, SW2 = 0```|```UP```|
+   |```DOWN```|```RESET = 1```|```INIT```|
    |```UP```|```SW1 = 0```|```PAUSE```|
    |```UP```|```RESET = 1```|```INIT```|
+   |```UP```|```SW1 = 1, SW2 = 1```|```DOWN```|
 
    Para poder realizar las transiciones, es necesario conocer el valor que toman las entradas y los estados asociados. Para esto se empleran las siguientes variables asociadas al estado actual y a los valores que tienen las entradas cuando son leidos:
 
-   ```ìno
+   ```ino
    // Variable empleada para el estado actual
    int state;
 
@@ -240,11 +242,11 @@ El circuito en el que se implementara este sistema se muestra a continuación:
      |```INIT```|```RESET = 1```|```INIT```|
      |```INIT```|```RESET = 0```, ```SW1 = 0```|```PAUSE```|
      |```INIT```|```RESET = 0```, ```SW1 = 1```,```SW2 = 0```|```UP```|
-     |```INIT```|```RESET = 0``` , ```SW1 = 1```,```SW2 = 1```|```LOW```|
+     |```INIT```|```RESET = 0``` , ```SW1 = 1```,```SW2 = 1```|```DOWN```|
 
      El fragmento de codigo asociado a este estado de muestra a continuación:
 
-     ```ìno
+     ```ino
      case INIT:
        // Reinicio del contador
        cnt = 0;      
@@ -265,10 +267,227 @@ El circuito en el que se implementara este sistema se muestra a continuación:
        break;
      ```
 
+    * **Estado PAUSE**: La parte de la tabla donde el estado actual es **PAUSE**, se muestra a continuación:
+  
+     |Estado actual|Entradas|Siguiente estado|
+     |---|---|---|
+     |```PAUSE```|```SW1 = 1, SW2 = 0```|```UP```|
+     |```PAUSE```|```SW1 = 1, SW2 = 1```|```DOWN```|
+     |```PAUSE```|```RESET = 1```|```INIT```|
 
+     El fragmento de codigo asociado a este estado de muestra a continuación:
 
+     ```ino
+     case PAUSE:
+      // El contador queda pausado (No se hace nada)
 
+      // Transiciones desde el estado PAUSE (Otra forma)   
+      if(reset_value == HIGH) {
+         // PAUSE -> INIT
+         state = INIT;    
+      }
+      else {
+        if(sw1_value == HIGH && sw2_value == LOW) {
+         // PAUSE -> UP
+         state = UP;    
+        }
+        else if(sw1_value == HIGH && sw2_value == HIGH) {
+         // PAUSE -> DOWN
+         state = DOWN;    
+        }
+      }
+      break;
+     ```
 
+    * **Estado UP**: La parte de la tabla donde el estado actual es **UP**, se muestra a continuación:
+  
+     |Estado actual|Entradas|Siguiente estado|
+     |---|---|---|
+     |```UP```|```SW1 = 0```|```PAUSE```|
+     |```UP```|```SW1 = 1, SW2 = 1```|```LOW```|
+     |```UP```|```RESET = 1```|```INIT```|
+
+     El fragmento de codigo asociado a este estado de muestra a continuación:
+
+     ```ino
+     case UP:
+      // Incremento del contador
+      cnt += 1; 
+      // Transiciones desde el estado INIT      
+      if(reset_value == HIGH) {
+         // UP -> INIT
+         state = INIT;    
+      }
+      else if(reset_value == LOW && sw1_value == LOW) {
+         // UP -> PAUSE
+         state = PAUSE;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && sw2_value == HIGH) {
+         //UP -> DOWN
+         state = DOWN;    
+      }    
+      break;
+     ```
+
+    * **Estado DOWN**: La parte de la tabla donde el estado actual es **DOWN**, se muestra a continuación:
+  
+     |Estado actual|Entradas|Siguiente estado|
+     |---|---|---|
+     |```DOWN```|```SW1 = 0```|```PAUSE```|
+     |```DOWN```|```SW1 = 1, SW2 = 0```|```UP```|
+     |```DOWN```|```RESET = 1```|```INIT```|
+
+     El fragmento de codigo asociado a este estado de muestra a continuación:
+
+     ```ino
+     case DOWN:
+      // Incremento del contador
+      cnt -= 1;
+      // Transiciones desde el estado INIT      
+      if(reset_value == HIGH) {
+         // DOWN -> INIT
+         state = INIT;    
+      }
+      else if(reset_value == LOW && sw1_value == LOW) {
+         // DOWN -> PAUSE
+         state = PAUSE;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && sw2_value == LOW) {
+         //DOWN -> UP
+         state = UP;    
+      }    
+      break;
+     ```
+
+Finalmente el codigo de la implementación completa se muestra a continución ([simulación](https://www.tinkercad.com/things/fV5PeiHDENv)):
+
+```ino
+// Definicion de los estados
+#define INIT 1
+#define PAUSE 2
+#define UP 3
+#define DOWN 4
+
+// Entradas
+#define RESET 3
+#define SW1 9
+#define SW2 8
+
+// Variable empleada para el estado actual
+int state;
+
+// Variables asociadas a las entradas
+int reset_value;
+int sw1_value;
+int sw2_value;
+
+// Variable para el contador
+int cnt = 0;
+
+// Codigo de inicializacion
+void setup() {
+  // Condiguracion de entradas y salidas
+  pinMode(RESET, INPUT);
+  pinMode(SW1, INPUT);
+  pinMode(SW2, INPUT);
+  // Configuracion puerto serial
+  Serial.begin(9600);
+    
+  // Estado inicial de la FSM
+  state = INIT;
+  
+}
+
+// ciclo infinito
+void loop() {
+  // Lectura de las entradas
+  reset_value = digitalRead(RESET);
+  sw1_value = digitalRead(SW1);
+  sw2_value = digitalRead(SW2);
+  
+  
+  switch(state) {
+    case INIT:
+      // Reinicio del contador
+      cnt = 0;      
+      // Transiciones desde el estado INIT      
+      if(reset_value == LOW && sw1_value == LOW) {
+         // INIT -> PAUSE
+         state = PAUSE;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && SW2 == LOW) {
+         // INIT -> UP
+         state = UP;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && SW2 == HIGH) {
+         // INIT -> DOWN
+         state = DOWN;    
+      }    
+      break;
+    case PAUSE:
+      // El contador queda pausado (No se hace nada)
+
+      // Transiciones desde el estado PAUSE (Otra forma)   
+      if(reset_value == HIGH) {
+         // PAUSE -> INIT
+         state = INIT;    
+      }
+      else {
+        if(sw1_value == HIGH && sw2_value == LOW) {
+         // PAUSE -> UP
+         state = UP;    
+        }
+        else if(sw1_value == HIGH && sw2_value == HIGH) {
+         // PAUSE -> DOWN
+         state = DOWN;    
+        }
+      }
+      break;
+    case UP:
+      // Incremento del contador
+      cnt += 1; 
+      // Transiciones desde el estado INIT      
+      if(reset_value == HIGH) {
+         // UP -> INIT
+         state = INIT;    
+      }
+      else if(reset_value == LOW && sw1_value == LOW) {
+         // UP -> PAUSE
+         state = PAUSE;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && sw2_value == HIGH) {
+         //UP -> DOWN
+         state = DOWN;    
+      }    
+      break;
+    case DOWN:
+      // Incremento del contador
+      cnt -= 1;
+      // Transiciones desde el estado INIT      
+      if(reset_value == HIGH) {
+         // DOWN -> INIT
+         state = INIT;    
+      }
+      else if(reset_value == LOW && sw1_value == LOW) {
+         // DOWN -> PAUSE
+         state = PAUSE;    
+      }
+      else if(reset_value == LOW && sw1_value == HIGH && sw2_value == LOW) {
+         //DOWN -> UP
+         state = UP;    
+      }    
+      break;
+  }
+  delay(500);
+  Serial.println(cnt);
+  if(cnt > 19) {
+    cnt = 0;
+  }
+  else if (cnt < 0) {
+    cnt = 19;
+  }
+}
+```
 
 ### Referencias
 
