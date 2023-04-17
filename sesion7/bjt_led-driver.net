@@ -1,0 +1,18 @@
+* C:\Users\Usuario\Documents\UdeM\2022-1\repos-electronica\laboratorio\sesion7\bjt_led-driver.asc
+Q1 Vout N004 0 0 2N2222
+Rb Vin N004 2.7k
+Rc Vcc N002 330
+V1 Vcc 0 5
+Vi Vin 0 PULSE(0 5 500m 1n 1n 500m 1s)
+D1 N002 Vout LED_GENERAL
+.model D D
+.lib C:\Users\Usuario\Documents\LTspiceXVII\lib\cmp\standard.dio
+.model NPN NPN
+.model PNP PNP
+.lib C:\Users\Usuario\Documents\LTspiceXVII\lib\cmp\standard.bjt
+.tran 0 2s 0 0.2m
+* Analisis
+.model LED_GENERAL D (IS=1a RS=3.3 N=1.8)
+* Modelo del led
+.backanno
+.end

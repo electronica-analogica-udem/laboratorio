@@ -1,0 +1,21 @@
+Circuit: * C:\Users\Usuario\Documents\UdeM\2022-1\repos-electronica\laboratorio\sesion7\bjt_led-driver.asc
+
+Direct Newton iteration for .op point succeeded.
+
+Date: Mon Apr 17 00:04:59 2023
+Total elapsed time: 0.251 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 20594
+traniter = 20565
+tranpoints = 10223
+accept = 10181
+rejected = 42
+matrix size = 11
+fillins = 0
+solver = Normal
+Matrix Compiler1: 556 bytes object code size  0.2/0.1/[0.1]
+Matrix Compiler2: off  [0.1]/0.1/0.2
+
