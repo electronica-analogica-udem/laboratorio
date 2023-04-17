@@ -97,7 +97,6 @@ Luego para estos nuevos valores.
 
 $$\beta_F = \frac{I_C}{I_B} = \frac{9.1}{1.59} = 5.72$$
 
-
 ### Simulación
 
 Para modelar el led vamos a usar el modelo que se da en el siguiente [link](https://github.com/kicad-spice-library/KiCad-Spice-Library/blob/master/Models/Diode/led.lib). Si montamos la simulación en LTSpice, esta queda como se muestra a continuación:
@@ -157,3 +156,86 @@ Como alimentación y tierra para el circuito, haga uso de los pineas **5V** y **
   |$V_C$||
   |$V_{Led}$||
 
+
+## Relay como carga
+
+Un relé (en ingles, relay) es un switch electromecanico que se abre y cierra debido al campo electromagnetico generado por la corriente que pasa por la bobina que lo conforma. (La animación del funcionamiento se encuentra en el siguiente [link](https://docs.arduino.cc/tutorials/4-relays-shield/4-relay-shield-basics)).
+
+![relay](relay.png)
+
+El relay es usado principalmente para controlar el encendido y apagado de dispositivos que requieren altos niveles de voltajes o corrientes a traves de la aplicación señales de baja potencia desde dispositivos como los microcontroladores. 
+
+![relay_apps](https://programarfacil.com/wp-content/uploads/2020/10/rele-con-arduino-dispositivos.jpg)
+
+El simbolo esquematico de un relay se muestra a continuación:
+
+![relay_symbol](simbolo_relay.png)
+
+### Especificaciones de los relay
+
+Los fabricantes de relés siempre suministran una hoja de datos (data sheet) con las especificaciones del relé. Esta hoja suele contenter los valores nominales de voltaje y corriente tanto para la bobina del relé como para sus contactos de conmutación. Tambien se suele incluir información sobre la ubicación de la bobina del relé y los terminales de contacto de conmutación. Dentro de las caracteristicas mas importantes descritas en la hoja de datose estan:
+* **Pickup current**: Cantidad mínima de corriente a traves de la bobina necesaria para activación.
+* **Holding current**: Cantidad mínima de corriente requerida para mantener el relé energizado.
+* **Dropout voltage**: Voltaje máximo de la bobina en el que el relé ya no está energizado.
+* **Contact voltage rating**: Voltaje máximo para el cual los contactos del relé son capaces de cambiar de manera segura.
+
+Para entender mejor sobre lo anterior, se recomienda revisar el siguiente [link](https://programarfacil.com/blog/arduino-blog/rele-con-arduino-lampara/).
+
+### Relay driver
+
+En la pagina **Arduino Relay Control Circuit Designing and Code** ([link](https://www.electroniclinic.com/arduino-relay-control-circuit-designing-and-code/)) se describe claramente el procedimiendo para diseñar un driver para relee. Lo mas importante es conocer la corriente necesaria para energizar el relé lo cual se puede hacer midiendo (con un multimetro) la resistencia en la bobina y por medio de la aplicación de la ley de Ohm, conociendo el voltaje que se aplicara sobre la bobina, deducir la corriente asociada a esta, basicamente:
+
+$$I_{Relay} = \frac{V}{R}$$
+
+Como el Relay sera la carga que controlará el transistor, se deberá verificar que la $I_{C(max)} > I_{Relay}$ (es importante tener en cuenta, que la corriente del colector sea varias veces la corriente de la carga). 
+
+**Ejemplo**: Diseñe un driver para Relé de forma que el transistor opere en la región de saturación, asuma que el relé tiene una resistencia interna de $50\ \Omega$ y que el voltaje de control es de 0 ó 5V. El circuito del driver se muestra a continuación:
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* https://randomnerdtutorials.com/guide-for-relay-module-with-arduino/
+* https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
+* https://learn.adafruit.com/adafruit-power-relay-featherwing/overview
+* https://blog.adafruit.com/2016/04/02/how-to-set-up-a-5v-relay-on-the-arduino-arduinod16/
+* https://learn.adafruit.com/adafruit-io-hub-with-the-adafruit-funhouse/relay-control-example
+* https://learn.sparkfun.com/tutorials/qwiic-single-relay-hookup-guide/all
+* https://cdn.sparkfun.com/assets/5/e/e/d/f/3V_Relay_Datasheet_en-g5le.pdf
+* https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-arduino---v32/experiment-13-using-relays
+* https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
+
+
+
+
+## Referencias
+
+1. https://learn.adafruit.com/transistors-101
+2. https://learn.sparkfun.com/tutorials/transistors/
+3. https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors
+4. https://learn.sparkfun.com/tutorials/discrete-semiconductor-kit-identification-guide
+5. https://learn.sparkfun.com/tutorials/driving-motors-with-arduino/introducing-the-transistor
+6. https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
+7. https://tourlomousis.pages.cba.mit.edu/fabclass-recitation-electronics/
+8. https://craftofelectronics.org/todo/rotation/switching.html
+9. https://www.robotroom.com/BipolarHBridge.html
+10. https://docs.arduino.cc/tutorials/motor-shield-rev3/msr3-controlling-dc-motor
+11. https://arduinogetstarted.com/tutorials/arduino-dc-motor
+12. https://www.instructables.com/DC-Motor-Control-Arduino-Uno-R3/
+13. https://www.robotique.tech/robotics/running-a-dc-motor-with-arduino-in-both-directions/
+14. https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/overview
