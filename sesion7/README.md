@@ -191,6 +191,47 @@ Como el Relay sera la carga que controlará el transistor, se deberá verificar 
 
 **Ejemplo**: Diseñe un driver para Relé de forma que el transistor opere en la región de saturación, asuma que el relé tiene una resistencia interna de $50\ \Omega$ y que el voltaje de control es de 0 ó 5V. El circuito del driver se muestra a continuación:
 
+![relay](relay_driver.png)
+
+Inicialmente tenemos que:
+
+$$I_{Relay} = I_{C} = \frac{9}{50} = 180\ mA$$
+
+Si miramos el datasheet del transistor NPN 2N2222 ([link](https://www.onsemi.com/pdf/datasheet/p2n2222a-d.pdf)) vemos que $I_{C(max)} = 600\ mA$ por lo que este transistor nos sirve. Luego tenemos que tomando $\beta_{min} = 40$:
+
+La idea, es asegurarnos de que no se pida mas de $20\ mA$ de corriente de control por lo tanto si elegimos $10\ mA$
+
+$$\beta_F = \frac{I_C}{I_B} = \frac{180m}{10m} = 18$$
+
+Como se cumple que $\beta_F < \beta_{min}$ entonces podemos proceder con el calculo de la resistencia $R_B$, luego
+
+$$I_B = \frac{v_I - V_{BE}}{R_B} = \frac{5-0.7}{R_B}$$
+
+Si reemplazamos los valores conocidos tenemos que:
+
+$$9m = \frac{5 - 0.7}{R_B}$$
+
+$$R_B = \frac{5 - 0.7}{10m}$$
+
+$$R_B = 430\Omega$$
+
+Luego, el valor comercial para la resistencia de la base mas cercano es $R_B = 470 \Omega$. 
+
+### Simulación
+
+La simulación del circuito en LTSpice ([bjt_led-driver.asc](bjt_led-driver.asc)) se muestra a continuación:
+
+![relay_driver](relay_driver_spice.png)
+
+Los resultados de la simulación se muestran en la siguiente grafica:
+
+![relay_driver_sim](relay_driver_sim.png)
+
+
+
+
+
+
 
 
 
@@ -218,6 +259,8 @@ Como el Relay sera la carga que controlará el transistor, se deberá verificar 
 * https://learn.sparkfun.com/tutorials/qwiic-single-relay-hookup-guide/all
 * https://cdn.sparkfun.com/assets/5/e/e/d/f/3V_Relay_Datasheet_en-g5le.pdf
 * https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-arduino---v32/experiment-13-using-relays
+* https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
+* https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html
 * https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
 
 

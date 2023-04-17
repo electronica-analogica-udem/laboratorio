@@ -1,0 +1,13 @@
+* C:\Users\Usuario\Documents\UdeM\2022-1\repos-electronica\laboratorio\sesion7\bjt_relay-driver.asc
+Q1 Vout N002 0 0 2N2222
+Rb Vin N002 470
+Rc Vcc Vout 50
+V1 Vcc 0 9
+Vi Vin 0 PULSE(0 5 500m 1n 1n 500m 1s)
+.model NPN NPN
+.model PNP PNP
+.lib C:\Users\Usuario\Documents\LTspiceXVII\lib\cmp\standard.bjt
+.tran 0 2s 0 0.2m
+* Analisis
+.backanno
+.end
