@@ -1,6 +1,6 @@
 # Aplicaciones del transistor BJT como switch
 
-Circuito base:
+El circuito base analizado en la teoria es el siguiente:
 
 ![circuito_base](circuito_base.png)
 
@@ -9,6 +9,11 @@ $$i_B=\frac{v_I - V_{BE}}{R_B}$$
 $$i_C=\beta i_B$$
 
 $$v_C=V_{CC} - R_C i_C$$
+
+A lo largo de esta guia, lo que haremos sera ir cambiando la carga y analizando varios casos de aplicación del uso del transistor en corte y saturación tal y como lo muestra la siguiente figura tomada del siguiente [link](https://www.electronics-tutorials.ws/io/output-interfacing-circuits.html): 
+
+![fig_resumen](fig_resumen.png)
+
 
 ## Led driver
 
@@ -227,43 +232,178 @@ Los resultados de la simulación se muestran en la siguiente grafica:
 
 ![relay_driver_sim](relay_driver_sim.png)
 
+Ademas de la simulación anterior, tambien se muestra la simulación del driver en Tinkercad ([link](https://www.tinkercad.com/things/gGjs0A6k5D7)) cuyos resultados se muestran a continuación:
+
+* **Transistor ON**:
+  
+  ![cerrado](relay_driver_on.png)
+
+* **Transistor OFF**:
+  
+  ![abierto](relay_driver_off.png)
+
+En el driver anterior abra notado que se usa un diodo conocido como **diodo rueda libre** (en ingles, **Flywheel diode**). Consulte cual es su función.
+
+### Montaje real
+
+Antes de realizar el montaje con el arduino, realizar el siguiente montaje mostrado a continuación:
+
+![relay](relay_driver.png)
+
+Y proceda a realizar las siguientes mediciones:
+
+* **Transistor ON**: $V_I = 5V$
+  
+  |Variable|Valor|
+  |---|---|
+  |$I_C$||
+  |$I_B$||
+  |$V_C$||
 
 
+* **Transistor OFF**: $V_I = 0V$
+  
+  |Variable|Valor|
+  |---|---|
+  |$I_C$||
+  |$I_B$||
+  |$V_C$||
+
+### Motores y solenoides
+
+Ademas de los relé (vistos anteriormente), existen otro tipo de cargas inductivas (hechas con una bobina de alambre) que no pueden ser controladas por dispositivos de baja potencia el arduino. Para poder controlar dispositivos de alta potencia, los dispositivos de baja potencia usan interfaces de acondicionamiento de señal conocidas como **drivers** siendo el transistor, un componente clave en la constricción de estos.
+
+![motor_driver](motor_driver.png)
+
+Una de las principales aplicaciónes de las cargas inductivas es la transformación de energia electrica en mecanica. Cuando un material magnetico (hierro por ejemplo) es rodeado por una bobina, se construye un electroimán. Cuando una corriente fluye a través de la bobina, se genera un fuerte campo magnético haciendo que el nucleo (material ferromagnetico) se convierta en un iman; por otro lado, cuando la corriente se detiene, el material deja de ser una iman. Existen varios tipos de electroimanes como:
+* **Solenoide**: es un tipo de electroimán en el que el núcleo se desliza hacia adelante y hacia atrás dentro de la bobina. Se puede utilizar para crear movimiento lineal a partir de una corriente.
+* **Motor**: es un tipo de electoiman en el que la disposición de las bobinas e imanes permanentes hace que se produzca movimiento rotatorio a partir de la corriente. Un motor esta compuesto principalmente de dos partes; la parte fija conocida como **estator** y la parte movil o **rotor**.
+
+![motor](https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/io-io31.gif)
+
+Existen diferentes tipos de motores (Para mas información puede consultar el siguiente [link](https://www.electronics-tutorials.ws/io/io_7.html)); sin embargo, en nuestro caso solo nos dedicaremos a analizar el **motor DC con escobillas** (Ver: **Conceptos básicos de los motores de CC con escobillas** [link](https://www.digikey.com/es/blog/basics-of-brushed-dc-motors)).
+
+![motor_escobillas](motor_escobillas.jpg)
+
+Para conocer sobre el diseño de un driver de motor se recomienda que profundice con detenimiento mirando los siguientes recursos:
+* Getting Started with Arduino ([link](https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html))
+* Motor DC con Arduino y driver L298N o L293D [link](https://programarfacil.com/electronica/motor-dc/))
+* Driving Motors with Arduino ([link](https://learn.sparkfun.com/tutorials/driving-motors-with-arduino/wiring-up-the-circuit))
+* Motors and Selecting the Right One
+([link](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one))
+
+**Ejemplo**: Se desea implementar el control de un motor DC mediante el arduino. El circuito a implementar se muestra a continuación:
+
+![arduino_motor_driver](bjt_motor_driver_sch.png)
+
+El motor disponible es un pequeño motor DC de 6 V ([datasheet](https://www.adafruit.com/product/711)) cuyas principales caracteristicas se resumen a continuación:
+* **Rango de operación**: 4.5 - 9 V
+* **Voltaje nominal**: 6 V
+* **Corriente de vacío**: 70 mA
+* **Corriente con carga**: 250 mA
+* **Velocidad sin carga**: 9100 ± 1800 rpm
+* **Velocidad con carga**: 4500 ±1500 rpm
+* **Corriente de parada**: 500 max.
+
+¿Cual es el valor la resistencia $R_B$ para controlar el transistor de modo que este opere como switch?
+
+**Solución**: Como punto de partida es necesario verificar las caracteristicas electricas maximas de los elementos involucrados:
+* **Arduino UNO**: Si nos fijamos en el datasheet ([link](https://docs.arduino.cc/hardware/uno-rev3)), el arduino maneja una corriente DC por pin I/O de 20 mA de modo que de entrada, un motor no puede ser controlado directamente usando un pin I/O. Por otro lado, la corriente maxima para la salida de 5V es de 500 mA.
+* **Transistor 2N2222**: Al revisar el [datasheet](https://www.onsemi.com/pdf/datasheet/p2n2222a-d.pdf) del transistor, vemos que:
+  * **Corriente continua maxima en el colector**: 600 mA:
+  * **Ganancia de corriente DC** $(\beta)$: $\beta_{min}@150\ mA = 50$, $\beta_{min}@500\ mA = 40$.
+* **Motor DC**: La corriente con la que trabaja normalmente es la corriente con carga es de 250 mA.
+
+Teniendo en cuenta esto podemos deducir lo siguiente:
+1. Se puede usar la entrada de 5 V en este caso para del transistor para la alimentación del motor. Si embargo es util tener en cuenta el siguiente concejo tomado del siguiente [link](https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/breadboard-layout):
+   
+  
+    > The small motors does not draw more than 250mA but if you have a different motor, it could easily draw 1000mA, more than a USB port can handle! If you aren't sure of a motor's current draw, power the Arduino from a wall adapter, not just USB
+
+2. El transistor sirve pues su corriente maxima es superior a la corriente maxima del motor.
+
+Con esto en cuenta podemos proceder a realizar los calculos teniendo en cuenta los siguientes datos para el estado de saturación:
+* $I_{Load} = I_C = 250 mA$
+* $V_{CE(sat)} = 0.2 V$
+* $V_{BE} = 0.7 V$
+* $v_{I} = V_{control} = 5 V$
+* $V_{CC} = 5 V$
+
+Inicialmente hallamos $I_B$ eligiendo un $\beta_F < \beta_{min}$, y teniendo en cuenta que $I_B < 20 mA$ supongamos que de 20:
+
+$$ \beta_F = \frac{I_C}{I_B} = \frac{I_{Load}}{I_B}$$
+
+$$ 20 = \frac{250\ m}{I_B}$$
+
+$$ I_B = \frac{250\ m}{20} = 12.5 mA$$
+
+Luego, calculamos $R_B$:
 
 
+$$ I_B = \frac{v_I - V_{BE}}{R_B}$$
+
+$$ R_B = \frac{v_I - V_{BE}}{I_B} = \frac{v_{control} - V_{BE}}{I_B} = \frac{5 - 0.7}{12.5m} $$
+
+$$ R_B = 344 \Omega$$
+
+El valor comercial mas cercano al valor teorico es $R_B = 330 \Omega$ lo cual hace que al recalcular la corriente para la base el valor sea:
+
+$$ I_B = \frac{v_I - V_{BE}}{R_B} = \frac{4.3}{330} \approx 13 mA $$
+
+Para simular, vamos a buscar por ley de Ohm la resistencia asociada a la carga (motor):
+
+$$V_{load} = V_{motor} = v_C - V_{CE(sat)}$$
+
+$$V_{motor} = 5 - 0.2 = 4.8V$$
+
+$$ I_C = I_{Load} = \frac{V_{Load}}{R_C} = \frac{V_{Load}}{R_{Load}}$$
 
 
+$$ R_{Load} = \frac{V_{Load}}{I_{Load}} = \frac{4.8}{250m} = 19.2 \Omega$$
 
+De este modo tenemos el siguiente montaje en Spice ([bjt_motor-driver.asc](bjt_motor-driver.asc)) para llevar a cabo la simulación:
 
+![bjt_motor_driver_spice](bjt_motor_driver_spice.png)
 
- 
+La graficas de las señales de interes se muestran a continuación:
 
+![bjt_driver_sim](bjt_driver_sim.png)
 
+Finalmente, vamos a proceder a observar la simulación en tinkercad ([link](https://www.tinkercad.com/things/0F2bS0WtlEr)) cuando el transistor esta saturado:
 
+![motor_driver](motor_driver_tinkercad.png)
 
+Despues de realizados los calculos anteriormente descritos, el montaje final será:
 
+![driver_motor_montaje](driver_motor_montaje.png)
 
+Y el montaje a realizar será:
 
+![bjt_motor_driver_bb](bjt_motor_driver_bb.png)
 
+### Montaje
 
+Realizar el siguiente montaje en la protoboard:
 
+![bjt_motor_driver_montaje](bjt_motor_driver_montaje.png)
 
+Luego, empleando el multimetro realizar las siguientes mediciones y llenar las siguientes tablas:
 
+* **Transistor ON**: $V_I = 5V$
+  
+  |Variable|Valor|
+  |---|---|
+  |$I_C$||
+  |$I_B$||
+  |$V_C$||
 
-
-* https://randomnerdtutorials.com/guide-for-relay-module-with-arduino/
-* https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
-* https://learn.adafruit.com/adafruit-power-relay-featherwing/overview
-* https://blog.adafruit.com/2016/04/02/how-to-set-up-a-5v-relay-on-the-arduino-arduinod16/
-* https://learn.adafruit.com/adafruit-io-hub-with-the-adafruit-funhouse/relay-control-example
-* https://learn.sparkfun.com/tutorials/qwiic-single-relay-hookup-guide/all
-* https://cdn.sparkfun.com/assets/5/e/e/d/f/3V_Relay_Datasheet_en-g5le.pdf
-* https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-arduino---v32/experiment-13-using-relays
-* https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
-* https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html
-* https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
-
-
+* **Transistor OFF**: $V_I = 0V$
+  
+  |Variable|Valor|
+  |---|---|
+  |$I_C$||
+  |$I_B$||
+  |$V_C$||
 
 
 ## Referencias
@@ -282,3 +422,53 @@ Los resultados de la simulación se muestran en la siguiente grafica:
 12. https://www.instructables.com/DC-Motor-Control-Arduino-Uno-R3/
 13. https://www.robotique.tech/robotics/running-a-dc-motor-with-arduino-in-both-directions/
 14. https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/overview
+15. https://www.electronics-tutorials.ws/io/io_1.html
+16. https://uk.rs-online.com/web/content/discovery/ideas-and-advice/dc-motors-guide
+17. https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html#zz-7.
+18. http://playwithrobots.com/dc-motor-driver-circuits/
+19. https://www.electronics-tutorials.ws/io/io_7.html
+20. https://www.seeedstudio.com/130-DC-Motor-p-2023.html
+21. https://learn.adafruit.com/transistors-101/example-uses
+22. https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors
+23. https://en.wikipedia.org/wiki/Brushed_DC_electric_motor
+24. https://en.wikipedia.org/wiki/Electric_motor
+25. http://lancet.mit.edu/motors/motors3.html
+26. https://learn.sparkfun.com/tutorials/driving-motors-with-arduino/introducing-the-transistor
+27. https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
+28. https://learn.sparkfun.com/tutorials/transistors#applications-i-switches
+29. https://craftofelectronics.org/todo/rotation/switching.html
+30. https://www.iqsdirectory.com/articles/electric-motor/dc-motors.html
+31. https://www.laboratoriogluon.com/motores-dc-y-arduino/
+32. https://programarfacil.com/electronica/motor-dc/
+33. https://randomnerdtutorials.com/arduino-control-dc-motor-via-bluetooth/
+34. https://pygmalion.tech/tutoriales/electronica/motor-dc/
+35. https://docs.arduino.cc/learn/electronics/transistor-motor-control
+36. https://nationalmaglab.org/magnet-academy/watch-play/interactive-tutorials/dc-motor/
+37. https://randomnerdtutorials.com/esp32-dc-motor-l298n-motor-driver-control-speed-direction/
+38. https://learn.adafruit.com/adafruit-arduino-lesson-13-dc-motors/overview
+39. https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino/using-dc-motors
+40. https://www.adafruit.com/category/865
+41. https://www.hackster.io/bobowman/12v-dc-motor-controlled-by-adafruit-tb6612-motor-driver-feec83
+42. https://www.seeedstudio.com/130-DC-Motor-p-2023.html
+43. https://www.integrasources.com/blog/dc-motor-controller-design-principles/
+44. https://resources.pcb.cadence.com/blog/dc-motor-drive-circuit-design
+45. https://www.ti.com/lit/ug/tiduaw3/tiduaw3.pdf?ts=1681740521210&ref_url=https%253A%252F%252Fwww.google.com%252F
+46. https://hackernoon.com/building-a-brushed-dc-motor-controller-an-overview-ha3r3397
+47. https://www.instructables.com/Build-Your-Own-Motor-Driver/
+48. https://www.homemade-circuits.com/dc-motor-speed-controller-circuits/
+49. https://www.st.com/content/ccc/resource/sales_and_marketing/presentation/application_presentation/group0/23/a1/94/a3/39/cf/4c/37/introduction_to_electric_motors_pres.pdf/files/introduction_to_electric_motors_pres.pdf/jcr:content/translations/en.introduction_to_electric_motors_pres.pdf
+50. https://www.ti.com/lit/ml/sekp120/sekp120.pdf?ts=1681777546541&ref_url=https%253A%252F%252Fwww.google.com%252F
+51. https://learn.sparkfun.com/tutorials/driving-motors-with-arduino/introducing-the-transistor
+52. https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
+53. https://learn.sparkfun.com/tutorials/transistors#applications-i-switches
+54. https://randomnerdtutorials.com/guide-for-relay-module-with-arduino/
+55. https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-the-arduino-101genuino-101-board/experiment-11-using-a-transistor
+56. https://learn.adafruit.com/adafruit-power-relay-featherwing/overview
+57. https://blog.adafruit.com/2016/04/02/how-to-set-up-a-5v-relay-on-the-arduino-arduinod16/
+58. https://learn.adafruit.com/adafruit-io-hub-with-the-adafruit-funhouse/relay-control-example
+59. https://learn.sparkfun.com/tutorials/qwiic-single-relay-hookup-guide/all
+60. https://cdn.sparkfun.com/assets/5/e/e/d/f/3V_Relay_Datasheet_en-g5le.pdf
+61. https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-arduino---v32/experiment-13-using-relays
+62. https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
+63. https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html
+64. https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
