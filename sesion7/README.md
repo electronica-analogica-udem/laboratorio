@@ -289,8 +289,11 @@ Para conocer sobre el diseño de un driver de motor se recomienda que profundice
 * Getting Started with Arduino ([link](https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html))
 * Motor DC con Arduino y driver L298N o L293D [link](https://programarfacil.com/electronica/motor-dc/))
 * Driving Motors with Arduino ([link](https://learn.sparkfun.com/tutorials/driving-motors-with-arduino/wiring-up-the-circuit))
-* Motors and Selecting the Right One
-([link](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one))
+* Motors and Selecting the Right One ([link](https://learn.sparkfun.com/tutorials/motors-and-selecting-the-right-one))
+* Types of Motors ([link](https://learn.adafruit.com/adafruit-motor-selection-guide))
+* Measuring Motor Performance ([link](https://learn.adafruit.com/improve-brushed-dc-motor-performance/measuring-motor-performance))
+
+
 
 **Ejemplo**: Se desea implementar el control de un motor DC mediante el arduino. El circuito a implementar se muestra a continuación:
 
@@ -406,6 +409,35 @@ Luego, empleando el multimetro realizar las siguientes mediciones y llenar las s
   |$V_C$||
 
 
+## Puente H
+
+Un puente H es un circuito basado en transistores capaz de activar motores para que giren tanto en sentido horario como antihorario. Fundamentalmente, un puente H es una combinación de cuatro transistores con dos líneas de entrada (**INA** e **INB**) y dos salidas (**OUTA** y **OUTB**). La siguiente figura muestra un esquema general de un puente H:
+
+![puente-h](https://cdn.sparkfun.com/assets/learn_tutorials/1/9/3/h-bridge-circuit-600w.gif)
+
+Si amabas entradas tienen el mismo voltaje, las salidas al motor pondran el mismo voltaje y por lo tanto el motor no podra girar. Por otro lado, si las dos entradas son opuestas, el motor podra girar en cualquiera de las direcciones. La siguiente tabla describe el funcionamiento del puente H:
+
+
+|Input A	|Input B	|Output A	|Output B|	Motor Direction|
+|---|---|---|---|---|
+|0	|0	|1	|1	|Stopped (braking)|
+|0	|1	|1	|0	|Clockwise|
+|1	|0	|0	|1	|Counter-clockwise|
+|1	|1	|0	|0	|Stopped (braking)|
+
+A continuación se muestra un circuito tipico (tomado del siguiente [link](https://learn.adafruit.com/transistors-101/example-uses)) en el cual se usan diodos rueda libre y resistencias de base para la polarizacion y proteccion de los transistores:
+
+![puente_h](https://cdn-learn.adafruit.com/assets/assets/000/059/661/original/components_bridge-schematic.png?1534992744)
+
+El montaje en protoboard de este se muestra a continuación:
+
+![montaje](https://cdn-learn.adafruit.com/assets/assets/000/059/515/medium800/components_bridge-bb.png?1534870374)
+
+### Actividad
+
+Realice el montaje anterior y lleve a cabo las mediciones que se le soliciten en el laboratorio.
+
+
 ## Referencias
 
 1. https://learn.adafruit.com/transistors-101
@@ -472,3 +504,7 @@ Luego, empleando el multimetro realizar las siguientes mediciones y llenar las s
 62. https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
 63. https://www3.ntu.edu.sg/home/ehchua/programming/arduino/Arduino.html
 64. https://www.electronics-tutorials.ws/blog/relay-switch-circuit.html
+65. https://my.eng.utah.edu/~cs5789/2009/slides/motors.pdf
+66. https://my.eng.utah.edu/~cs5789/
+67. https://my.eng.utah.edu/~cs5789/2009/slides/I2c.pdf
+68. https://learn.adafruit.com/adafruit-motor-selection-guide
