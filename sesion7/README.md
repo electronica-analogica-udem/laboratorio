@@ -190,6 +190,10 @@ Para entender mejor sobre lo anterior, se recomienda revisar el siguiente [link]
 
 En la pagina **Arduino Relay Control Circuit Designing and Code** ([link](https://www.electroniclinic.com/arduino-relay-control-circuit-designing-and-code/)) se describe claramente el procedimiendo para diseñar un driver para relee. Lo mas importante es conocer la corriente necesaria para energizar el relé lo cual se puede hacer midiendo (con un multimetro) la resistencia en la bobina y por medio de la aplicación de la ley de Ohm, conociendo el voltaje que se aplicara sobre la bobina, deducir la corriente asociada a esta, basicamente:
 
+$$I_{Relay} = \frac{V-V_{CE(sat)}}{R}$$
+
+A veces para hacer mas rapido el calculo se suele utilizar la expresión anterior sin tener en cuenta $V_{CE(sat)}$, así:
+
 $$I_{Relay} = \frac{V}{R}$$
 
 Como el Relay sera la carga que controlará el transistor, se deberá verificar que la $I_{C(max)} > I_{Relay}$ (es importante tener en cuenta, que la corriente del colector sea varias veces la corriente de la carga). 
@@ -248,7 +252,7 @@ En el driver anterior abra notado que se usa un diodo conocido como **diodo rued
 
 Antes de realizar el montaje con el arduino, realizar el siguiente montaje mostrado a continuación:
 
-![relay](relay_driver.png)
+![relay](relay_driver2.png)
 
 Y proceda a realizar las siguientes mediciones:
 
