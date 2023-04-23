@@ -5,7 +5,7 @@
 
 |Función|Descripción|
 |---|---|
-|```Serial.begin()```|Configura la velocidad de transmisión serial (bits por segundo = baud).<br>**Parámetros**: <ul><li>**speed**: Velocidad de transmisión</ul>**Sintaxis**:<br>```Serial.begin(speed)```|
+|```Serial.begin()```|Configura la velocidad de transmisión serial (bits por segundo = baud).<br><br>**Parámetros**: <ul><li>**speed**: Velocidad de transmisión</ul>**Sintaxis**:<br>```Serial.begin(speed)```|
 |```Serial.print()```|Imprime los datos del puerto serial en formato ASCII.<br>**Sintaxis**:<br>```Serial.print(val)```<br>```Serial.print(val, format)```|
 
 
