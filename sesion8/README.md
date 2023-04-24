@@ -55,7 +55,7 @@ En el link [arduino programming notebook](http://engineering.nyu.edu/gk12/amps-c
 
 ### Ejemplos
 
-Los siguientes ejemplos se tomaron del capitulo cuatro del libro **Arduino Cookbook** cuyo repositorio se encuentra en el siguiente [link](https://github.com/bjepson/Arduino-Cookbook-3ed-INO). Para ejecutar estos no necesita emplear hardware adicional, solo basta el arduino conectado a una terminal serial. 
+Los siguientes ejemplos se tomaron del capitulo cuatro ([link al capitulo](https://www.oreilly.com/library/view/arduino-cookbook/9781449399368/ch04.html)) del libro **Arduino Cookbook** cuyo repositorio se encuentra en el siguiente [link](https://github.com/bjepson/Arduino-Cookbook-3ed-INO). Para ejecutar estos no necesita emplear hardware adicional, solo basta el arduino conectado a una terminal serial.
 
 ![ejemplo](serial_hardware.png)
 
