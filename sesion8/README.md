@@ -292,17 +292,165 @@ Una vez que realice el montaje entienda lo que hace el programa (recuerde el **e
 
 Un motor puede girar en dos sentidos, sin embargo, en los circuitos anteriormente analizados lo maximo que se logro fue cambiar la velocidad de giro del motor (**montaje 2**). 
 
-Para poder cambiar el sentido de giro de un motor, es necesario invertir el sentido de la corriente que pasa a traves de este y es aqui donde entra el **Puente H** (Para mas información puede consultar el siguiente [link](https://www.modularcircuits.com/blog/articles/h-bridge-secrets/h-bridges-the-basics/))
+Para poder cambiar el sentido de giro de un motor, es necesario invertir el sentido de la corriente que pasa a traves de este y es aqui donde entra el **Puente H** (Para mas información puede consultar el siguiente [link](https://www.modularcircuits.com/blog/articles/h-bridge-secrets/h-bridges-the-basics/)). 
+
+En la siguiente figura, se muestra un puente H implementado usando componentes discretos (transistores y resistencias). Simulelo ([link](https://www.tinkercad.com/things/lsSNY3pfsXN)) y entienda como funciona antes de continuar (**NOTA**: Este circuito esta malo):
+
+![puente_H](puenteH_manual.png)
+
+Existen tambien circuitos integrados que implementan un puente H, de estos una opción es el **L293x Quadruple Half-H Drivers** ([datasheet](https://www.ti.com/lit/ds/symlink/l293.pdf)). En la siguiente figura (tomada de [link](https://learn.adafruit.com/adafruit-arduino-lesson-15-dc-motor-reversing/overview)) se resumen los pines del integrado **L293D**:
+
+![pinout](https://cdn-learn.adafruit.com/assets/assets/000/002/482/medium800/learn_arduino_L293D.jpg?1396783583)
 
 
-Luego https://www.tinkercad.com/things/lsSNY3pfsXN:
+En el siguiente circuito explora el uso del **L293D** para realizar la misma tarea que el montaje discreto ([link](https://www.tinkercad.com/things/jybxCLBf008)):
+
+![puente_H](puenteH_L293D.png)
+
+El efecto de los pines **IN1** e **IN2** sobre el motor se resume en la siguiente tabla:
+
+|IN1|IN2|Motor|
+|---|---|---|
+|GND|	GND|Stopped|
+|5V	|GND|	Turns in Direction A|
+|GND	|5V	|Turns in Direction B|
+|5V|	5V	|Stopped|
+
+### Montaje 4
+
+El siguiente circuito se tomo de **Arduino Lesson 15. DC Motor Reversing** ([link](https://www.tinkercad.com/things/jybxCLBf008)). Realice el montaje descrito a continuación:
+
+![experimento](puenteH_L293D_manual.png)
+
+Luego, descargue el siguiente programa en el arduino y pruebelo ([simulación](https://www.tinkercad.com/things/ggjdvFVbN7l)):
+
+```ino
+/*
+Adafruit Arduino - Lesson 15. Bi-directional Motor
+*/
+
+int enablePin = 11;
+int in1Pin = 10;
+int in2Pin = 9;
+int switchPin = 7;
+int potPin = 0;
+
+void setup()
+{
+  pinMode(in1Pin, OUTPUT);
+  pinMode(in2Pin, OUTPUT);
+  pinMode(enablePin, OUTPUT);
+  pinMode(switchPin, INPUT_PULLUP);
+}
+
+void loop()
+{
+  int speed = analogRead(potPin) / 4;
+  boolean reverse = digitalRead(switchPin);
+  setMotor(speed, reverse);
+}
+
+void setMotor(int speed, boolean reverse)
+{
+  analogWrite(enablePin, speed);
+  digitalWrite(in1Pin, ! reverse);
+  digitalWrite(in2Pin, reverse);
+}
+```
+
+### Montaje 5
+
+El siguiente circuito implemente un sistema de control de giro de un motor DC mediante el uso de comandos enviados desde un cliente en el PC (el monitor serial por ejemplo) a traves del puerto serial ([simulación](https://www.tinkercad.com/things/lTkKDwRnHCb)). 
+
+![puenteH_serial](puenteH_L293D_serial.png)
+
+Los comandos empleados se explican a continuación:
+
+|Comando|Efecto|
+|---|---|
+|```P```|Hace que el motor se detenga|
+|```D```|Hace que el motor gire a la derecha|
+|```I```|Hace que el motor gire a la izquiera|
+
+Descargue y pruebe el codigo que implementa la funcionalidad de la aplicación y que se muestra a continuación:
+
+```ino
+int enablePin = 11;
+int in1Pin = 10;
+int in2Pin = 9;
 
 
+char cmd;  // Comando
+bool estado_motor = false;
 
+void setup() {
+  pinMode(enablePin, OUTPUT);
+  pinMode(in1Pin, OUTPUT);
+  pinMode(in2Pin, OUTPUT);
+  digitalWrite(enablePin, LOW);
+  digitalWrite(in1Pin, LOW);
+  digitalWrite(in2Pin, LOW);
+  Serial.begin(9600);
+  while (!Serial);
+  Serial.println("**********************");
+  Serial.println("Motor control: ");
+  Serial.println("- PARAR: P");
+  Serial.println("- GIRO DERECHA: D");
+  Serial.println("- GIRO IZQUIERDA: I");
+  Serial.println("**********************");
+}
+
+void loop() {
+  if(Serial.available() > 0) {
+    // read the incoming byte
+    cmd = Serial.read();
+    Serial.print("Received [");
+    Serial.print(cmd);
+    switch(cmd) {
+      case 'P':
+        pararMotor();
+        Serial.println("]: Motor -> Detenido");
+        break;
+      case 'D':
+        girarDerecha();
+        Serial.println("]: Motor -> Girando a la derecha");
+        break;
+      case 'I':
+        girarIzquierda();
+        Serial.println("]: Motor -> Girando a la izquierda");
+        break;
+    }
+  }
+}
+
+void pararMotor(){
+  estado_motor = false;
+  digitalWrite(enablePin, LOW); 
+}
+
+void girarDerecha(){
+  if(estado_motor == false) { 
+    digitalWrite(enablePin, HIGH); 
+    estado_motor = true;
+  }
+  digitalWrite(in2Pin, LOW); 
+  digitalWrite(in1Pin, HIGH); 
+}
+
+void girarIzquierda(){
+  if(estado_motor == false) { 
+    digitalWrite(enablePin, HIGH); 
+    estado_motor = true;
+  }
+  digitalWrite(in1Pin, LOW); 
+  digitalWrite(in2Pin, HIGH); 
+}
+```
+**Pregunta**: ¿De otra manera se puede parar el motor sin tener que habilitar y deshabilitar el circuito integrado L293D? Intentelo.
 
 ## Tarea
 
-Realizar el siguiente montaje y entender lo que hace [Arduino Lesson 15. DC Motor Reversing](https://learn.adafruit.com/adafruit-arduino-lesson-15-dc-motor-reversing)
+Pendiente.
 
 
 
