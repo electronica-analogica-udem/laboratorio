@@ -14,7 +14,6 @@ La siguiente tabla muestra las actividades de laboratorio por semana:
 |8| Sesión 8 - Manejo del puerto serial en Arduino |25/04/2023|Guia sesión 8 ([link](./sesion8/README.md))|
 |9| Sesión 9 - Manejo del LCD usando Arduino |25/04/2023|Guia sesión 9 ([link](./sesion9/README.md))|
 
-
 ## Referencias
 
 1. https://www.luisllamas.es/
@@ -28,3 +27,6 @@ La siguiente tabla muestra las actividades de laboratorio por semana:
 9. https://circuitdigest.com/esp32-projects
 10. https://ubidots.com/
 11. https://projecthub.arduino.cc/
+12. https://learn.sparkfun.com/tutorials/beginner-parts-kit-identification-guide
+13. https://learn.sparkfun.com/tutorials/discrete-semiconductor-kit-identification-guide
+14. https://www.passdiy.com/pdf/diyopamp.pdf
