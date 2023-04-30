@@ -9,7 +9,11 @@ La siguiente tabla muestra las actividades de laboratorio por semana:
 |3| Sesión 3 - Manejo de una fotocelda|07/03/2023|Guia sesión 3 ([link](./sesion3/README.md))|
 |4| Sesión 4 - Led y display de siete segmentos|14/03/2023|Guia sesión 4 ([link](./sesion4/README.md))|
 |5| Sesión 5 - Botones y debounce|11/04/2023|Guia sesión 5 ([link](./sesion5/README.md))|
-|6| Sesión 5 - Maquinas de estado|11/04/2023|Guia sesión 6 ([link](./sesion6/README.md))|
+|6| Sesión 6 - Maquinas de estado|11/04/2023|Guia sesión 6 ([link](./sesion6/README.md))|
+|7| Sesión 7 - Transistor BJT como switch|18/04/2023|Guia sesión 7 ([link](./sesion7/README.md))|
+|8| Sesión 8 - Manejo del puerto serial en Arduino |25/04/2023|Guia sesión 8 ([link](./sesion8/README.md))|
+|9| Sesión 9 - Manejo del LCD usando Arduino |25/04/2023|Guia sesión 9 ([link](./sesion9/README.md))|
+
 
 ## Referencias
 
@@ -23,3 +27,4 @@ La siguiente tabla muestra las actividades de laboratorio por semana:
 8. https://how2electronics.com/iot-projects/esp32-projects/
 9. https://circuitdigest.com/esp32-projects
 10. https://ubidots.com/
+11. https://projecthub.arduino.cc/

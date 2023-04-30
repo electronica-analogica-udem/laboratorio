@@ -127,6 +127,7 @@ void loop(void) {
 ## Referencias
 
 
+* https://makeabilitylab.github.io/physcomp/sensors/photoresistors.html
 * https://learn.sparkfun.com/tutorials/photocell-hookup-guide?_ga=2.134332913.1669424074.1678683217-2025443212.1674610637
 * https://www.sparkfun.com/products/9088
 * https://learn.adafruit.com/photocells/using-a-photocell
