@@ -318,8 +318,48 @@ Como herramientas de apoyo para facilitar la generación de caracteres personali
 1. Custom Character Generator for HD44780 LCD Modules ([link](http://omerk.github.io/lcdchargen/))
 2. HD44780 LCD User-Defined Graphics ([link](https://www.quinapalus.com/hd44780udg.html))
 
-## Ejemplos 
+## Ejemplos
 
+### Ejemplo Arduino
+
+Los siguientes ejemplos son tomados de la pagina **Liquid Crystal Displays (LCD) with Arduino** ([link](https://docs.arduino.cc/learn/electronics/lcd-displays)) de Arduino y replicados en tinkercad para facilitar su comprensión. El esquematico de los ejemplos se muestra a continuación:
+
+![esquematico](https://docs.arduino.cc/static/87dafeba444f77d41fe0061e5a34bfde/a6d36/LCD_Base_bb_Schem.png)
+
+El montaje asociado a este esquematico se muestra en la siguiente figura:
+
+![montaje_ejemplos](montaje_lcd-ejemplos-arduino.png)
+
+1. **Hello World Example**: En este ejemplo imprime la palabra ```Hello World!``` al LCD y muestra el tiempo en segundos desde que el arduino fue reseteado ([link](https://www.tinkercad.com/things/8wVWGzEreen)).
+2. **Autoscroll Example**: Este ejemplo muestra como usar los metodos ```autoscroll()``` y ```noAutoscroll()``` para mover todo el texto que se muestra en el display de izquierda a derecha:
+   * **```autoscroll()```**: Mueve todo el texto un espacio a la izquierda una cada vez que una letra es agregada.
+   * **```noAutoscroll()```**: Desactiva el **scrolling**
+  
+   En este ejemplo muestra los caracteres desde el **0** hasta el **9** con el **scrolling** desactivado, luego ubica el cursor en la esquina inferior derecha y activa el **autoscroll** imprimiendo los numeros de nuevo ([link](https://www.tinkercad.com/things/l1HyR2Gey5N)).
+3. **Blink Example**: Este ejemplo muestra como usar los metodos ```blink()``` y ```noBlink()``` para experimentar con el parpadeo del cursor. ([link](https://www.tinkercad.com/things/fvoQd8V0Z4o)).
+4. **Cursor**: Este metodo muestra como usar los métodos ```cursor()``` y ```noCursor()``` para controlar el despliegue del indicador del cursor (Guion bajo: **_** ). ([link](https://www.tinkercad.com/things/3jgEXpPz0qx)).
+5. **Display Example**: Este ejemplo muestra como usar los métodos ```display()``` y ```noDisplay()``` para prender y apagar el display. El texto que esta siendo desplegado se mantendra aun cuano se use ```noDisplay()``` de manera que volvera a hacerse visible al emplear ```display()```. ([link](https://www.tinkercad.com/things/5diDpSEoc65)).
+6. **Scroll Example**: Este ejemplo muestra como usar los métodos ```scrollDisplayLeft()``` y ```scrollDisplayRight()``` para invertir la dirección el a cual va se mueve el texto. Para esto, imprime ```"Hello World!"``` desplazandolo hacia la izquierda fuera de la pantalla, luego fuera de la pantalla a la derecha y luego desde donde empezo. ([link](https://www.tinkercad.com/things/9Wa0aLzWkqJ)).
+7. **Serial to Display Example**: En este ejemplo se reciben datos por serial desde un PC (desde el monitor serial por ejemplo) y se despliegan en el Display LCD. ([link](https://www.tinkercad.com/things/b0ZvPqfRHVw)).
+8. **Set Cursor Example**: Este ejemplo muestra como usar el método ```setCursor()``` para reposicionar el cursor ([link](https://www.tinkercad.com/things/4Zb4dGUQUe4)).. A continuación se muestran algunos ejemplos de uso de este método:
+   
+   ```ino
+   lcd.setCursor(0, 0); // top left
+   lcd.setCursor(15, 0); // top right
+   lcd.setCursor(0, 1); // bottom left
+   lcd.setCursor(15, 1); // bottom right
+   ```
+
+9. **Text Direction Example**: Este ejemplo muestra como usar los métodos ```leftToRight()``` y ```rightToLeft()``` para controlar la forma como aparece el texto a partir del cursor.
+   * ```rightToLeft()``` hace que el texto aparezca a la izquierda desde el cursor, como si la pantalla estuviera justificada a la derecha.
+   * ```leftToRight()``` hace que el texto fluya hacia la derecha desde el cursor, como si la pantalla estuviera justificada a la izquierda.
+
+   Para esto, en el ejemplo se imprime desde la ```a``` a la ```l``` de derecha a izquierda, luego desde la ```m``` a la ```r``` de izquierda a derecha y luego desde la ```s``` a la ```z``` de derecha a izquierda de nuevo ([link](https://www.tinkercad.com/things/axuK9KW7Ulx))..
+
+10. **Custom Character**: Este ejemplo demuestr como emplear agregar caracteres personalizados en un display LCD. Para este ejemplo, se requiere un potenciometro adicional conectado a la pin ```A0``` del ardunino. Este potenciometro controla la variable ```delayTime```. ([link](https://www.tinkercad.com/things/jHnGf46o4xH)).
+    
+    ![ejemplo_10](ejemplo10_lcd.png)
+    
 
 
 ## Referencias
