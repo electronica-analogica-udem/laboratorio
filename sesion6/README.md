@@ -489,6 +489,185 @@ void loop() {
 }
 ```
 
+### Ejemplo 2
+
+**Enunciado**: Contador con **RUN/PAUSE**
+
+**Hardware**:
+
+![counter_pause](counter_pause.png)
+
+**Software sin usar máquina de estados**
+
+La implementación completa se muestra a continución ([simulación](https://www.tinkercad.com/things/37OJKPe9qVd)):
+
+```ino
+// Constantes
+const int MAX_CNT = 20;
+
+// Puertos de entrada
+const int BUTTON = 4;
+
+// Variables
+int cnt;           // Contador
+int b_state;       // Estado actual del boton
+int prev_b_state;  // Estado previo del boton
+int ban_cnt;       // Bandera de conteo (LOW: PAUSE; HIGH: RUN)
+
+// Codigo de inicializacion
+void setup() {
+  
+  // Puertos I/O
+  pinMode(BUTTON,INPUT);
+  
+  // Serial
+  Serial.begin(9600);
+  
+  // Estado del programa
+  cnt = 1;
+  prev_b_state = LOW; 
+  ban_cnt = LOW; //
+  Serial.println("Iniciando conteo...");
+}
+
+void loop() {
+  b_state = digitalRead(BUTTON);
+  // Verificacion de cambio del estado del boton
+  if(prev_b_state != b_state) {
+    // Verificacion de cambio de: LOW -> HIGH
+    if(b_state == HIGH) {
+      ban_cnt = !ban_cnt; // Cambio de estado en el contador
+    }
+  }
+  // Parte que se repite
+  delay(500);
+  if(ban_cnt == HIGH) {
+    // Contador RUN
+    cnt++;
+    if(cnt > MAX_CNT) {
+       cnt = 1;
+    }
+  }
+  Serial.println(cnt);
+  prev_b_state = b_state;
+}
+```
+
+**Software usando máquina de estados**
+
+La implementación usando maquina de estados se encuentra a continuación ([simulación](https://www.tinkercad.com/things/i8n2VnvMQjZ)):
+
+```ino
+// Estados
+#define PAUSE 0
+#define RUN 1
+#define TO_RUN 2
+#define TO_PAUSE 3
+
+// Constantes
+const int MAX_CNT = 19;
+
+// Puertos de entrada
+const int BUTTON = 4;
+
+// Variables
+int cnt;
+int b_state;
+int state;
+
+// Codigo de inicializacion
+void setup() {
+  
+  // Puertos I/O
+  pinMode(BUTTON,INPUT);
+  
+  // Serial
+  Serial.begin(9600);
+  
+  // Estado del programa
+  cnt = 0;
+  state = PAUSE;
+  Serial.println("Iniciando conteo...");
+
+}
+
+void loop() {
+  // lectura de puertos
+  b_state = digitalRead(BUTTON);
+  
+  // Transiciones
+  switch(state) {
+     case PAUSE:
+       // PAUSE
+       if(b_state == HIGH) {
+         // PAUSE -> TO_RUN
+         state = TO_RUN;
+       }
+       else if (b_state == LOW) {
+         // PAUSE -> PAUSE (Se queda en el mismo estado)
+         state = PAUSE;         
+       }
+       break;
+     case TO_RUN:
+       // RUN
+       if(b_state == HIGH) {
+         // TO_RUN -> TO_RUN (Se queda en el mismo estado)
+         state = TO_RUN;
+       }
+       else if (b_state == LOW) {
+         // TO_RUN -> RUN
+         state = RUN;         
+       }       
+       break;   
+     case RUN:
+       // RUN
+       if(b_state == HIGH) {
+         // RUN -> TO_PAUSE
+         state = TO_PAUSE;
+       }
+       /***************************************
+         Se comento para mostra que 
+         este condicional no es necesario
+       else if (b_state == LOW) {
+         // RUN -> RUN
+         state = RUN;         
+       }
+       ****************************************/      
+       break;
+     case TO_PAUSE:
+       // TO_PAUSE
+       if(b_state == LOW) {
+         // TO_PAUSE -> PAUSE
+         state = PAUSE;
+       }    
+       break;
+   }
+
+   // Salidas
+   switch(state) {
+     case PAUSE:
+       Serial.println("PAUSE");
+       break;
+     case RUN:
+       Serial.println("RUN");
+       cnt++;
+       Serial.println(cnt);
+       if(cnt > MAX_CNT) {
+         cnt = 0;
+       }
+       break;
+     case TO_PAUSE:
+       Serial.println("TO_PAUSE");
+       break;
+     case TO_RUN:
+       Serial.println("TO_RUN");
+       break;
+   }
+  // Parte que se repite
+  delay(500);
+}
+```
+
 ## Actividad de refuerzo
 
 Una empresa le pide diseñar un controlador controlador de semáforo para controlar el trafico en una intersección entre dos caminos:
