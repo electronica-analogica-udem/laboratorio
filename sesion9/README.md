@@ -10,8 +10,10 @@
 
 Referencias principales:
 
-1. https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic/componentes-adicionales
-2. 
+1. **Microcontroladores PIC - Programación en BASIC: componentes-adicionales** ([link](https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic/componentes-adicionales))
+2. **Character LCDs - Adafruit** ([link](https://learn.adafruit.com/character-lcds))
+3. **Basic Character LCD Hookup Guide - Sparkfun** ([link](https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all))
+4. **Random Nerd Tutorials** ([link](https://randomnerdtutorials.com/projects-arduino/))
 
 
 ## Sobre los displays LCD
@@ -283,14 +285,11 @@ putstr('UdeM')
 
 Para evitar el gorroso procedimiento para desplegar los caracteres anteriores existen los drivers, los cuales para el caso del arduino estan implementados. Esto facilita enormemente la tarea de controlar el display LCD.
 
+## Manejo del LCD usando Arduino
 
-----
+Afortunadamente no es necesario implementar...
+Las funciones se encuentran en la libreria https://www.arduino.cc/reference/en/libraries/liquidcrystal/
 
-
-Afortunadamente no es ncesar
-Las funciones se encuentran en la lubreria https://www.arduino.cc/reference/en/libraries/liquidcrystal/
-
-Creates a variable of type LiquidCrystal. The display can be controlled using 4 or 8 data lines. If the former, omit the pin numbers for d0 to d3 and leave those lines unconnected. The RW pin can be tied to ground instead of connected to a pin on the Arduino; if so, omit it from this function’s parameters.
 
 |Función|Descripción|
 |---|---|
@@ -319,75 +318,11 @@ Como herramientas de apoyo para facilitar la generación de caracteres personali
 1. Custom Character Generator for HD44780 LCD Modules ([link](http://omerk.github.io/lcdchargen/))
 2. HD44780 LCD User-Defined Graphics ([link](https://www.quinapalus.com/hd44780udg.html))
 
+## Ejemplos 
 
 
 
-
-
-
----
-
-https://circuitdigest.com/article/16x2-lcd-display-module-pinout-datasheet
-
-https://www.axman.com/sites/default/files/HC-LCD%20Commands.pdf
-https://www.philadelphia.edu.jo/academics/kaubaidy/uploads/ESD-lec12A.pdf
-
-https://www.sparkfun.com/datasheets/LCD/GDM1602K.pdf
-
-
-
-
-
-
-
-
-https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/
-
-
-https://www.uet.edu.pk/pp/ee/~mtahir/EE371/EE371/Experiment_9.pdf
-
-
-
-
-que controla en qué parte de la memoria de la pantalla LCD está escribiendo datos. Puede seleccionar el registro de datos, que contiene lo que sucede en la pantalla, o un registro de instrucciones, que es donde el controlador de la pantalla LCD busca instrucciones sobre qué hacer a continuación.
-
-
-
-
-. You can select either the data register, which holds what goes on the screen, or an instruction register, which is where the LCD's controller looks for instructions on what to do next.
-A Read/Write (R/W) pin that selects reading mode or writing mode
-An Enable pin that enables writing to the registers
-8 data pins (D0 -D7). The states of these pins (high or low) are the bits that you're writing to a register when you write, or the values you're reading when you read.
-There's also a display contrast pin (Vo), power supply pins (+5V and GND) and LED Backlight (Bklt+ and BKlt-) pins that you can use to power the LCD, control the display contrast, and turn on and off the LED backlight, respectively.
-
-The process of controlling the display involves putting the data that form the image of what you want to display into the data registers, then putting instructions in the instruction register. The LiquidCrystal Library simplifies this for you so you don't need to know the low-level instructions.
-
-The Hitachi-compatible LCDs can be controlled in two modes: 4-bit or 8-bit. The 4-bit mode requires seven I/O pins from the Arduino, while the 8-bit mode requires 11 pins. For displaying text on the screen, you can do most everything in 4-bit mode, so example shows how to control a 16x2 LCD in 4-bit mode.
-
-
-Tomado de: https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
-
-
-Librería LiquidCrystal de Arduino
-El IDE de Arduino ya viene con una librería que nos permite manejar diferentes tamaños de LCD’s, La documentación completa la pueden encontrar en la página oficial de Arduino: LiquidCrystal
-
-Explicaremos las funciones principales, las cuales se usaran en este tutorial.
-
-LiquidCrystal(rs, en, d4, d5, d6, d7)
-Función constructor, crea una variable de la clase LiquidCrystal, con los pines indicados.
-
-begin(cols, rows)
-Inicializa el LCD, es necesario especificar el número de columnas (cols) y filas (rows) del LCD.
-
-
-
-Explicado la librería veamos unos ejemplos:
-
-
------
-
-
-## Circuitos de interfaz
+## Referencias
 
 1. https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic
 2. https://docs.arduino.cc/learn/electronics/lcd-displays
@@ -407,24 +342,20 @@ Explicado la librería veamos unos ejemplos:
 16. http://oomlout.com/oom.php/index.htm
 17. https://www.jodyculkin.com/category/pcomp
 18. https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/
-
-## Referencias
-
-1. https://docs.arduino.cc/learn/electronics/lcd-displays
-2. https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
-3. https://www.bolanosdj.com.ar/SOBRELCD/TEORIALCDV1.pdf
-4. https://www.bolanosdj.com.ar/MOVIL/ARDUINO2/EjemploLCD.pdf
-5. https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
-6. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
-7. https://www.quinapalus.com/hd44780udg.html
-8. https://randomnerdtutorials.com/esp32-esp8266-i2c-lcd-arduino-ide/
-9. http://www.dinceraydin.com/djlcdsim/djlcdsim.html
-10. https://www.adafruit.com/product/181
-11. https://learn.adafruit.com/character-lcds
-12. https://learn.adafruit.com/light-meter
-13. https://wiki.seeedstudio.com/Grove-16x2_LCD_Series/
-14. https://makeabilitylab.github.io/physcomp/arduino/
-15. https://users.cs.utah.edu/~elb/Papers/PhysicalComputingTalk.pdf
-16. https://pdm.lsupathways.org/4_physicalcomputing/
-17. https://www.uet.edu.pk/pp/ee/~mtahir/EE371/EE371_Fall2014.html
-    
+19. https://docs.arduino.cc/learn/electronics/lcd-displays
+20. https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
+21. https://www.bolanosdj.com.ar/SOBRELCD/TEORIALCDV1.pdf
+22. https://www.bolanosdj.com.ar/MOVIL/ARDUINO2/EjemploLCD.pdf
+23. https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
+24. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
+25. https://www.quinapalus.com/hd44780udg.html
+26. https://randomnerdtutorials.com/esp32-esp8266-i2c-lcd-arduino-ide/
+27. http://www.dinceraydin.com/djlcdsim/djlcdsim.html
+28. https://www.adafruit.com/product/181
+29. https://learn.adafruit.com/character-lcds
+30. https://learn.adafruit.com/light-meter
+31. https://wiki.seeedstudio.com/Grove-16x2_LCD_Series/
+32. https://makeabilitylab.github.io/physcomp/arduino/
+33. https://users.cs.utah.edu/~elb/Papers/PhysicalComputingTalk.pdf
+34. https://pdm.lsupathways.org/4_physicalcomputing/
+35. https://www.uet.edu.pk/pp/ee/~mtahir/EE371/EE371_Fall2014.html
