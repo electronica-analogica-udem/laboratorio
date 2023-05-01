@@ -28,14 +28,13 @@ https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-
 
 -----
 
-Displays LCD
+### Pines y conexión
 
 La siguiente figura muestra un LCD 16x2 con sus respectivos pines de interfaz:
 
 ![LCD_16x2](LCD_16x2.png)
 
-La descripción de cada uno de los pines se muestra en la siguiente tabla (para mayor información puede consultar el manual de especificaciones: **Specifications Of LCD module** ([link](https://www.sparkfun.com/datasheets/LCD/ADM1602K-NSW-FBS-3.3v.pdf))).
-
+La descripción de cada uno de los pines se muestra en la siguiente tabla:
 
 |Función|Pin|Nombre|Estado Lógico|Descripción|
 |---|---|---|:---:|---|
@@ -45,18 +44,26 @@ La descripción de cada uno de los pines se muestra en la siguiente tabla (para 
 |Control de funcionamiento|4|**RS**|0/1|<ul><li>**RS=0**: D0 – D7 considerados como comandos<li>**RS=1**: D0 – D7 considerados como datos</ul>|
 |Control de funcionamiento|5|**R/W**|0/1|<ul><li>**RS=0**: Escribir los datos (del microcontrolador al LCD)<li>**RS=1**: Leer los daots (del LCD al microcontrolador)</ul>|
 |Control de funcionamiento|6|**E**|Transición de 0 a 1|<ul><li>**E=0**: Acceso al visualizador LCd deshabilitado<li>**E=1**: Funcionamiento normal Datos/comandos se están transmitiendo al LCD</ul>|
+|Datos / Comandos|7|**D0**|0 / 1|Bit 0 LSB|
+|Datos / Comandos|8|**D1**|0 / 1|Bit 1|
+|Datos / Comandos|9|**D2**|0 / 1|Bit 2|
+|Datos / Comandos|10|**D3**|0 / 1|Bit 3|
+|Datos / Comandos|11|**D4**|0 / 1|Bit 4|
+|Datos / Comandos|12|**D5**|0 / 1|Bit 5|
+|Datos / Comandos|13|**D6**|0 / 1|Bit 6|
+|Datos / Comandos|14|**D7**|0 / 1|Bit 7 MSB|
+|Alimentación positiva del backlight|15|**K**|-|0V|
+|Alimentación negativa del backlight|16|**A**|-|+5V|
 
-|1|**VSS**|Tierra (**GND**)|
-|2|**VDD**|Alimentacion (**+5V**)|
-|3|**V0**|Ajuste de contraste|
-|4|**RS**|Señal de seleccion de registro de datos (**HIGH**) o instrucciones (**LOW**)|
-|5|**RW**|Señal de seleccion para lectura (**HIGH**) o escritura (**LOW**)|
-|6|**E**|Señal que habilita o deshabilita la escritura en el display|
-|7-14|**D0-D7**|Bus de datos. Cuando la conexión entre el microcontrolador es usando ocho lineas, se emplean todos los pines; cuando la conexión es a cuatro lineas, solo se emplean los **D0-D3**|
-|15|**A**|Alimentación positiva del backlight (**+5V**)|
-|16|**K**|Alimentación negativa del backlight|**GND**|
+La siguiente figura muestra la forma conexión tipica entre un LCD y un microcontrolador:
 
-Los display LCD que normalmente se suelen usar, emplean el controlador **Hitachi HD44780**. El datasheet del controlador Hitachi HD44780 ([link](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf)) contiene toda la información sobre la estructura, comunicación y control del LCD y por lo tanto, es una guia obligada cuando se desea diseñar un driver desde cero. El estudio de esta información se sale de los objetivos de esta guia (y hasta nos da tres vueltas) de modo que no se tratara en detalle. Sin embargo es util hablar de algunos aspectos basicos del controlador hitachi.
+![conexio_LCD](conexion_LCD.gif)
+
+Tal y como se resalta en la figura, es posible usar o no todas las lineas de datos del LCD y de esto depende el tipo de conexión la cual puede ser:
+* **Conexión a 4 lineas**: Los bits de datos menos significativos (**D0-D3**) no se conectan.
+* **Conexión a 8 lineas**: Se conectan todos los pines asociados a los bits de datos.
+
+Los display LCD que normalmente se suelen usar, emplean el controlador **Hitachi HD44780**. El datasheet del controlador Hitachi HD44780 ([link](https://www.sparkfun.com/datasheets/LCD/HD44780.pdf)) contiene toda la información sobre la estructura, comunicación y control del LCD y por lo tanto, es una guia obligada cuando se desea diseñar un driver desde cero. El estudio de esta información se sale de los objetivos de esta guia (y hasta nos da tres vueltas) de modo que no se tratara en detalle. Sin embargo es util hablar de algunos aspectos basicos del controlador Hitachi.
 
 ### Memoria del controlador Hitachi HD44780
 
@@ -73,7 +80,7 @@ El controlador Hitachi HD44780 tiene tres localizaciones de memoria principales:
   
   ![CGRAM](cgram.gif)
 
-### Comandos básicos 
+### Comandos básicos
 
 Todos los datos transmitidos a un display LCD por las salidas D0-D7 serán interpretados como un comando o un dato dependiendo del estado logico de pin **RS**:
 * **RS = 1**: Los bits D0 - D7 son direcciones de los caracteres a visualizar. En este caso, el controlado del LCD direcciona un carácter seleccionado y lo visualiza en la dirección especificada en la DDRAM la cual se define antes de transmitir el carácter, o en caso contrario se toma con base en la dirección del carácter anteriormente transmitido la cual se aumenta automaticamente.
@@ -227,7 +234,7 @@ La siguiente tabla muestra una linea de comandos para el LCD:
     </tbody>
 </table>
 
-> Donde:
+**Donde**:
 > * **I/D**
 >   * 1 = Incremento (por 1)
 >   * 0 = Decremento (por 1)
@@ -251,7 +258,7 @@ La siguiente tabla muestra una linea de comandos para el LCD:
 >   * 0 = Cursor desactivado
 > * **F**
 >   * 1 = Carácter de 5x10 puntos
->   * 0 = Carácter de 5x7 puntos
+>   * 0 = Carácter de 5x8 puntos
 > * **B**
 >   * 1 = Parpadeo del cursor encendido
 >   * 0 = Parpadeo del cursor apagado
@@ -263,13 +270,19 @@ La siguiente tabla muestra una linea de comandos para el LCD:
 
 Es una señal que indica que el display esta listo para recibir el siguiente dato, despues de ejecutado un comando. Esta señal se puede leer de la línea D7 y cuando su valor es de 0V (**BF=0**) indica que el display esta listo para recibir un nuevo comando.
 
-https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic/componentes-adicionales
+## Rutina de inicialización
 
+Al encender la fuente de alimentación, el LCD se reinicia automáticamente. Esto dura aproximadamente 15mS. Después de eso, el LCD está listo para funcionar. Por lo general, el reinicio automático se lleva a cabo sin problemas. Sin embargo, cuando esto no se da, existen dos algoritmos de inicialización que dependen de la conexión hecha entre en microcontrolador y el bus de datos (4 o 8 lineas). La siguientes figuras muestran las instrucciones que se llevan en cada caso:
 
+* **Inicialización con conexion a 8 lineas**
+  
+  ![init_8](init_8.gif)
 
-CGRAM or “Character Generation Random Access Memory” allows the user to define special supplementary non-standard character types that are not in the CGROM. You can load your own dot pattern shapes and call these up for display.
+* **Inicialización con conexion a 4 lineas**
 
+  ![init_4](init_4.gif)
 
+El el siguiente [link](https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/15_Labs/SimulationForLab4/djlcdsim1/djlcdsim.html) se encuentra un simulador muy util para comprender todo lo anterior.
 
 Para mas información: https://openlabpro.com/guide/custom-character-lcd-pic/
 
@@ -282,31 +295,6 @@ download the datasheet.
 LCD Commands:
 
 There are some preset commands instructions in LCD, which we need to send to LCD through some microcontroller. Some important command instructions are given below (https://circuitdigest.com/sites/default/files/HD44780U.pdf):
-
-|Hex Code|Command to LCD Instruction Register|
-|---|---|
-|```0F```|LCD ON, cursor ON|
-|```01```|Clear display screen|
-|```02```|Return home|
-|```04```|Decrement cursor (shift cursor to left)|
-|```06```|Increment cursor (shift cursor to right)|
-|```05```|Shift display right|
-|```07```|Shift display left|
-|```0E```|Display ON, cursor blinking|
-|```80```|Force cursor to beginning of first line|
-|```C0```|Force cursor to beginning of second line|
-|```38```|2 lines and 5×7 matrix|
-|```83```|Cursor line 1 position 3|
-|```3C```|Activate second line|
-|```08```|Display OFF, cursor OFF|
-|```C1```|Jump to second line, position 1|
-|```OC```|Display ON, cursor OFF|
-|```C1```|Jump to second line, position 1|
-|```C2```|Jump to second line, position 2|
-
-
-Mejor esta tabla: https://learn.sparkfun.com/tutorials/pic-based-serial-enabled-character-lcd-hookup-guide
-
 
 ----
 
@@ -431,26 +419,7 @@ Función constructor, crea una variable de la clase LiquidCrystal, con los pines
 begin(cols, rows)
 Inicializa el LCD, es necesario especificar el número de columnas (cols) y filas (rows) del LCD.
 
-clear()
-Borra la pantalla LCD y posiciona el cursor en la esquina superior izquierda (posición (0,0)).
 
-setCursor(col, row)
-Posiciona el cursor del LCD en la posición indicada por col y row (x,y); es decir, establecer la ubicación en la que se mostrará posteriormente texto escrito para la pantalla LCD.
-
-write()
-Escribir un carácter en la pantalla LCD, en la ubicación actual del cursor.
-
-print()
-Escribe un texto o mensaje en el LCD, su uso es similar a un Serial.print
-
-scrollDisplayLeft()
-Se desplaza el contenido de la pantalla (texto y el cursor) un espacio hacia la izquierda.
-
-scrollDisplayRight()
-Se desplaza el contenido de la pantalla (texto y el cursor) un espacio a la derecha.
-
-createChar (num, datos)
-Crea un carácter personalizado para su uso en la pantalla LCD. Se admiten hasta ocho caracteres de 5x8 píxeles (numeradas del 0 al 7). Donde: num es el número de carácter y datos es una matriz que contienen los pixeles del carácter. Se verá un ejemplo de esto mas adelante.
 
 Explicado la librería veamos unos ejemplos:
 
@@ -460,21 +429,22 @@ Explicado la librería veamos unos ejemplos:
 
 ## Circuitos de interfaz
 
-1. https://makeabilitylab.github.io/physcomp/arduino/
-2. https://learn.adafruit.com/character-lcds
-3. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
-4. https://makeabilitylab.cs.washington.edu/
-5. https://k12maker.mit.edu/physical-computing.html
-6. https://www.instructables.com/member/EdgertonCenter/
-7. https://guides.temple.edu/c.php?g=419841&p=2863656
-8. https://wiki.ead.pucv.cl/Physical_Computing_-_UAI
-9. https://arduinotogo.com/
-10. https://github.com/arm-university/Smart-School-Projects
-11. https://github.com/moritzsalla/phys-comp
-12. https://www.ecarleton.ca/course/view.php?id=38
-13. https://blogs.uw.edu/hcdepcom/projects/proj13/smart-home-arduino
-14. http://oomlout.com/oom.php/index.htm
-15. https://www.jodyculkin.com/category/pcomp
+1. https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic
+2. https://makeabilitylab.github.io/physcomp/arduino/
+3. https://learn.adafruit.com/character-lcds
+4. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
+5. https://makeabilitylab.cs.washington.edu/
+6. https://k12maker.mit.edu/physical-computing.html
+7. https://www.instructables.com/member/EdgertonCenter/
+8. https://guides.temple.edu/c.php?g=419841&p=2863656
+9.  https://wiki.ead.pucv.cl/Physical_Computing_-_UAI
+10. https://arduinotogo.com/
+11. https://github.com/arm-university/Smart-School-Projects
+12. https://github.com/moritzsalla/phys-comp
+14. https://www.ecarleton.ca/course/view.php?id=38
+15. https://blogs.uw.edu/hcdepcom/projects/proj13/smart-home-arduino
+16. http://oomlout.com/oom.php/index.htm
+17. https://www.jodyculkin.com/category/pcomp
 
 ## Referencias
 
