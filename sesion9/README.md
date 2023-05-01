@@ -14,7 +14,7 @@ Referencias principales:
 2. **Character LCDs - Adafruit** ([link](https://learn.adafruit.com/character-lcds))
 3. **Basic Character LCD Hookup Guide - Sparkfun** ([link](https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all))
 4. **Random Nerd Tutorials** ([link](https://randomnerdtutorials.com/projects-arduino/))
-
+5. **SparkFun Inventor's Kit Experiment Guide - v4.0 --> Project 4: Display** ([link](https://learn.sparkfun.com/tutorials/sparkfun-inventors-kit-experiment-guide---v40/project-4-display))
 
 ## Sobre los displays LCD
 
