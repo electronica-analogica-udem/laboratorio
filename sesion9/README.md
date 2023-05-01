@@ -10,23 +10,11 @@
 
 Referencias principales:
 
-https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic/componentes-adicionales
+1. https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic/componentes-adicionales
+2. 
 
 
 ## Sobre los displays LCD
-
-
-
-
-
-https://robosans.com/learn/embedded/arduino/16x2-lcd-interfacing-with-arduino/
-
-
-
-
-https://naylampmechatronics.com/blog/34_tutorial-lcd-conectando-tu-arduino-a-un-lcd1602-y-lcd2004.html
-
------
 
 ### Pines y conexión
 
@@ -257,8 +245,8 @@ La siguiente tabla muestra una linea de comandos para el LCD:
 >   * 1 = Cursor activado
 >   * 0 = Cursor desactivado
 > * **F**
->   * 1 = Carácter de 5x10 puntos
->   * 0 = Carácter de 5x8 puntos
+>   * 1 = Carácter de 5x8 puntos
+>   * 0 = Carácter de 5x7 puntos
 > * **B**
 >   * 1 = Parpadeo del cursor encendido
 >   * 0 = Parpadeo del cursor apagado
@@ -270,7 +258,7 @@ La siguiente tabla muestra una linea de comandos para el LCD:
 
 Es una señal que indica que el display esta listo para recibir el siguiente dato, despues de ejecutado un comando. Esta señal se puede leer de la línea D7 y cuando su valor es de 0V (**BF=0**) indica que el display esta listo para recibir un nuevo comando.
 
-## Rutina de inicialización
+### Rutina de inicialización
 
 Al encender la fuente de alimentación, el LCD se reinicia automáticamente. Esto dura aproximadamente 15mS. Después de eso, el LCD está listo para funcionar. Por lo general, el reinicio automático se lleva a cabo sin problemas. Sin embargo, cuando esto no se da, existen dos algoritmos de inicialización que dependen de la conexión hecha entre en microcontrolador y el bus de datos (4 o 8 lineas). La siguientes figuras muestran las instrucciones que se llevan en cada caso:
 
@@ -282,19 +270,19 @@ Al encender la fuente de alimentación, el LCD se reinicia automáticamente. Est
 
   ![init_4](init_4.gif)
 
-El el siguiente [link](https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/15_Labs/SimulationForLab4/djlcdsim1/djlcdsim.html) se encuentra un simulador muy util para comprender todo lo anterior.
+El el siguiente [link](https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/15_Labs/SimulationForLab4/djlcdsim1/djlcdsim.html) se encuentra un simulador muy util para comprender todo lo anterior. En la siguiente figura se muestra como resultado en el display **UdeM** al aplicar las instrucciones mostradas a continuación:
 
-Para mas información: https://openlabpro.com/guide/custom-character-lcd-pic/
+```
+instr(3)
+instr(15)
+DDRadrs(0)
+putstr('UdeM')
+```
 
+![simulador_lcd](simulador_lcd.png)
 
-The datasheet for the Hitachi HD44780 LCD controller is the definitive reference for
-detailed, low-level functionality. The Arduino library insulates you from most of the
-complexity, but if you want to read about the raw capabilities of the chip, you can
-download the datasheet.
+Para evitar el gorroso procedimiento para desplegar los caracteres anteriores existen los drivers, los cuales para el caso del arduino estan implementados. Esto facilita enormemente la tarea de controlar el display LCD.
 
-LCD Commands:
-
-There are some preset commands instructions in LCD, which we need to send to LCD through some microcontroller. Some important command instructions are given below (https://circuitdigest.com/sites/default/files/HD44780U.pdf):
 
 ----
 
@@ -327,34 +315,12 @@ Creates a variable of type LiquidCrystal. The display can be controlled using 4 
 |[```rightToLeft()```](https://www.arduino.cc/reference/en/libraries/liquidcrystal/righttoleft/)|Establece la dirección en que se escribe el texto en el display de derecha a izquierda.<br><br>**Sintaxis**:<br>```lcd.rightToLeft()```<br><br>**Parámetros**: <ul><li>**```lcd```**: Variable tipo ```LiquidCrystal```</ul>|
 |[```createChar()```](https://www.arduino.cc/reference/en/libraries/liquidcrystal/createchar/)|Crea un carácter personalizado (glyph) para ser usado en el LCD. Se admiten hasta ocho caracteres de 5x8 píxeles (numeradas del 0 al 7). La apariencia de cada caracter se define en un arreglo de 8 bytes, uno por cada fila. Los cinco bits menos significativos de cada byte determinan los pixeles en esa fila. Para mostrar un caracter personalizado en el display se usa la función ```write``` con el numero del caracter personalizado (0-7) que se quiere mostrar<br><br>**Sintaxis**:<br>```lcd.createChar(num, data)```<br><br>**Parámetros**: <ul><li>**```lcd```**: Variable tipo ```LiquidCrystal```<li>**```num```**: Numero del caracter a crear (0-7) <li>**```data```**: Matrix de pixeles del dato a crear </ul>|
 
-
-
-----
-* https://openlabpro.com/guide/character-lcd-interfacing-in-8-bit-mode-with-pic-microcontroller/
-* https://openlabpro.com/guide/4-bit-lcd-interfacing-with-pic-microcontroller/
-* https://openlabpro.com/guide/custom-character-lcd-pic/
-----
-
-Liquid crystal displays (LCDs) and LED displays offer a convenient and inexpensive
-way to provide a user interface for a project.
+Como herramientas de apoyo para facilitar la generación de caracteres personalizados se recomienda el uso de las siguientes:
+1. Custom Character Generator for HD44780 LCD Modules ([link](http://omerk.github.io/lcdchargen/))
+2. HD44780 LCD User-Defined Graphics ([link](https://www.quinapalus.com/hd44780udg.html))
 
 
 
-Son estremadamente utiles para el despliegue de mensajes (status mesaje) de los sistemas electronicos.
-
-
-Diferentes tipos:
-"standard" blue&white 16x2, RGB 16x2 LCDs, "standard" blue&white 20x4 and RGB 20x4.
-
-
-
-
-Here is an example of a character LCD, 16 characters by 2 lines:
-
-If you look closely you can see the little rectangles where the characters are displayed. Each rectangle is a grid of pixels. Compare this to a graphical LCD such as the following:
-
-
-The graphical LCD has one big grid of pixels (in this case 128x64 of them) - It can display text but its best at displaying images. Graphical LCDs tend to be larger, more expensive, difficult to use and need many more pins because of the complexity added.
 
 
 
@@ -370,13 +336,7 @@ https://www.sparkfun.com/datasheets/LCD/GDM1602K.pdf
 
 
 
-Simulador LCD ([link](https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/15_Labs/SimulationForLab4/djlcdsim1/djlcdsim.html))
 
-
-Generador de caracteres ([link](http://omerk.github.io/lcdchargen/)) varios ejemplos de uso en [Custom character generator LCD
-](https://diyusthad.com/custom-character-generator-lcd)
-
-https://www.quinapalus.com/hd44780udg.html
 
 
 
@@ -430,21 +390,23 @@ Explicado la librería veamos unos ejemplos:
 ## Circuitos de interfaz
 
 1. https://www.mikroe.com/ebooks/microcontroladores-pic-programacion-en-basic
-2. https://makeabilitylab.github.io/physcomp/arduino/
-3. https://learn.adafruit.com/character-lcds
-4. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
-5. https://makeabilitylab.cs.washington.edu/
-6. https://k12maker.mit.edu/physical-computing.html
-7. https://www.instructables.com/member/EdgertonCenter/
-8. https://guides.temple.edu/c.php?g=419841&p=2863656
-9.  https://wiki.ead.pucv.cl/Physical_Computing_-_UAI
-10. https://arduinotogo.com/
-11. https://github.com/arm-university/Smart-School-Projects
-12. https://github.com/moritzsalla/phys-comp
+2. https://docs.arduino.cc/learn/electronics/lcd-displays
+3. https://makeabilitylab.github.io/physcomp/arduino/
+4. https://learn.adafruit.com/character-lcds
+5. https://learn.sparkfun.com/tutorials/basic-character-lcd-hookup-guide/all
+6. https://makeabilitylab.cs.washington.edu/
+7. https://k12maker.mit.edu/physical-computing.html
+8. https://www.instructables.com/member/EdgertonCenter/
+9. https://guides.temple.edu/c.php?g=419841&p=2863656
+10. https://wiki.ead.pucv.cl/Physical_Computing_-_UAI
+11. https://arduinotogo.com/
+12. https://github.com/arm-university/Smart-School-Projects
+13. https://github.com/moritzsalla/phys-comp
 14. https://www.ecarleton.ca/course/view.php?id=38
 15. https://blogs.uw.edu/hcdepcom/projects/proj13/smart-home-arduino
 16. http://oomlout.com/oom.php/index.htm
 17. https://www.jodyculkin.com/category/pcomp
+18. https://people.ucalgary.ca/~smithmr/2015webs/encm511_15/
 
 ## Referencias
 
