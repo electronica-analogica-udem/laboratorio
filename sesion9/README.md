@@ -357,9 +357,51 @@ El montaje asociado a este esquematico se muestra en la siguiente figura:
    Para esto, en el ejemplo se imprime desde la ```a``` a la ```l``` de derecha a izquierda, luego desde la ```m``` a la ```r``` de izquierda a derecha y luego desde la ```s``` a la ```z``` de derecha a izquierda de nuevo ([link](https://www.tinkercad.com/things/axuK9KW7Ulx))..
 
 10. **Custom Character**: Este ejemplo demuestr como emplear agregar caracteres personalizados en un display LCD. Para este ejemplo, se requiere un potenciometro adicional conectado a la pin ```A0``` del ardunino. Este potenciometro controla la variable ```delayTime```. ([link](https://www.tinkercad.com/things/jHnGf46o4xH)).
-    
-    ![ejemplo_10](ejemplo10_lcd.png)
-    
+
+  ![ejemplo_10](ejemplo10_lcd.png)
+
+### Algunos ejemplos del libro "Programming Arduino - Getting Started with Sketches" de Simon Monk
+
+Los siguientes ejemplos se tomaron del libro **Programming Arduino - Getting Started with Sketches** cuyo repositorio se encuentra en el siguiente [link](https://github.com/simonmonk/programming_arduino_ed2).
+
+![libro_simon_monk](https://camo.githubusercontent.com/a6aed398198d322a2715ca4beda42727fe72f5ef05d8d291c03430ccc88b70cd/68747470733a2f2f69322e77702e636f6d2f73696d6f6e6d6f6e6b2e6f72672f77702d636f6e74656e742f75706c6f6164732f323031332f31312f636f766572342e6a70673f726573697a653d333333253243343939)
+
+1. Desarrollar un programa Arduino que reciba una cadena de texto enviada desde un PC (por ejemplo desde el monitor serial) y la imprima en un display LCD. El funcionamiento del programa debe tener en cuenta los siguientes requisitos:
+   * Cuando la cadena serial es solo un caracter ```#```, el contenido que hay en el display se borra. Si el caracter ```#``` va seguido de una cadena de caracteres, esta cadena se desplegara desde el origen del display (eliminando la cadena que habia anteriormente en el display).
+   * Si el caracter recibido es un ```/``` el programa empieza a colocar texto a partir de la segunda linea del display. Cuando la cadena de caracteres enviada empieza con ```/``` los caracteres se imprimiran a partir de la segunda linea.
+   * Si la cadena de caracteres enviada no contiene ninguno de los dos caracteres especiales (```#``` o ```/```), los caracteres se imprimiran a partir de la posición en la que se encuentra actualmente el cursor.
+
+   A continuación se muestra el diagrama de conexión de este ejemplo:
+
+   ![ejemplo_lcd-simon-monk](ejemplo_lcd-simon-monk.png)
+
+   Para comprender mejor el funcionamiento del programa analice los siguientes archivos:
+   * **Código**: [sketch_09_01.ino](https://github.com/simonmonk/programming_arduino_ed2/blob/master/sketch_09_01/sketch_09_01.ino)
+   * **Simulación**: [enlace](https://www.tinkercad.com/things/lWuoRqhr4j2) 
+
+### Algunos ejemplos del libro "Arduino Cookbook"
+
+Los siguientes ejemplos se tomaron del libro **Arduino Cookbook** cuyo repositorio se encuentra en el siguiente [enlace](https://github.com/bjepson/Arduino-Cookbook-3ed-INO).
+
+![libro_arduino_cookbook](https://camo.githubusercontent.com/295fed2314a545b6eb6f3a4f665831461d36c195149c03395b5b406d098ecec9/68747470733a2f2f6c6561726e696e672e6f7265696c6c792e636f6d2f636f766572732f75726e3a6f726d3a626f6f6b3a393738313439313930333531332f343030772f)
+
+A continuación se muestra el montaje de la mayoria de los ejemplos mostrados.
+
+![arduino_cookbook_lcd_ejemplos](arduino_cookbook_lcd_ejemplos.png)
+
+1. El siguiente ejemplo muestra el despliegue de texto fijo y valores de variables en el LCD en diferentes posiciones. Mas exactamente en el ejemplo se muestra inicialmente un texto fijo acompañado del valor de un contador descendente de 9 a 0, luego, se despliega una secuencia de digitos en tres columnas de cuatro caracteres.
+   * **Código**: [ch11_formattext.ino](https://github.com/bjepson/Arduino-Cookbook-3ed-INO/blob/master/ch11/ch11_formattext/ch11_formattext.ino)
+   * **Simulación**: [link](https://www.tinkercad.com/things/fGiNvs0z0iU)
+
+2. En este ejemplo se ilustra como poner el cursor a parpadear y como encender y apagar el display bajo diferentes escenarios.
+   * **Código**: [ch11_blink.ino](https://github.com/bjepson/Arduino-Cookbook-3ed-INO/blob/master/ch11/ch11_blink/ch11_blink.ino)
+   * **Simulación**: [link](https://www.tinkercad.com/things/bSJvOdGseTO).
+
+3. En este ejemplo se ilustra como definir simbolos (glyphs) los cuales no son parte de los caracteres predefinidos en el LCD.
+   * **Código**: [ch11_custom_characters.ino](https://github.com/bjepson/Arduino-Cookbook-3ed-INO/blob/master/ch11/ch11_custom_characters/ch11_custom_characters.ino)
+   * **Simulación**: [link](https://www.tinkercad.com/things/89nSEmXxNoO)
+
+
 
 
 ## Referencias
