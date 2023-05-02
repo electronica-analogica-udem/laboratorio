@@ -283,6 +283,21 @@ putstr('UdeM')
 
 ![simulador_lcd](simulador_lcd.png)
 
+Por ejemplo, si se ensaya el siguiente conjunto de instrucciones tenemos:
+
+```
+instr(48);
+instr(3);
+instr(59);
+instr(1);
+DDRadrs(0);
+putstr('Volt: 0.75 V')
+DDRadrs(64);
+putstr('Temp: 74.71 C');
+```
+
+![salida_LCD](salida_lcd.png)
+
 Para evitar el gorroso procedimiento para desplegar los caracteres anteriores existen los drivers, los cuales para el caso del arduino estan implementados. Esto facilita enormemente la tarea de controlar el display LCD.
 
 ## Manejo del LCD usando Arduino
@@ -320,7 +335,7 @@ Como herramientas de apoyo para facilitar la generación de caracteres personali
 
 ## Ejemplos
 
-### Ejemplo Arduino
+### Ejemplos Arduino
 
 Los siguientes ejemplos son tomados de la pagina **Liquid Crystal Displays (LCD) with Arduino** ([link](https://docs.arduino.cc/learn/electronics/lcd-displays)) de Arduino y replicados en tinkercad para facilitar su comprensión. El esquematico de los ejemplos se muestra a continuación:
 
@@ -402,6 +417,220 @@ A continuación se muestra el montaje de la mayoria de los ejemplos mostrados.
    * **Simulación**: [link](https://www.tinkercad.com/things/89nSEmXxNoO)
 
 
+## Actividad de laboratorio
+
+Comprenda al API para el manejo de displays LCD alfanumericos empleando Arduino y luego analice y comprenda los ejemplos expuestos anteriormente. Se sugiere empezar un analisis rapido con los ejemplos mostrados en la siguiente tabla:
+
+|Sección|Ejemplos|Simulación|Montaje|
+|----|----|:----:|:----:|
+|Ejemplos Arduino|1, 6, 7, 8, 9, 10|X||
+|Ejemplos Programming Arduino|1|X|X|
+|Ejemplos Arduino Cookbook|1,2,3|X|X|
+
+## Retos
+
+### Reto 1
+
+Uno de los sensores mas comunes para medir temperaturas es el LM35 ([datasheet](https://www.ti.com/lit/ds/symlink/lm35.pdf)). El siguiente código toma como base el que se explica en el tutorial de Adafruit **TMP36 Temperature Sensor** ([link](https://learn.adafruit.com/tmp36-temperature-sensor)) y adaptado para el sensor LM35 tal y como allí se sugiere. En el siguiente montaje se muestra un ejemplo donde se hace uso para este sensor y se imprime usando el puerto serial información asociada con la temperatura del sensor (La simulación se encuentra en el siguiente [link](https://www.tinkercad.com/things/6Ev0wcOeZjK)):
+
+![lm35_arduino](actividad_lm35.png)
+
+El codigo implementado se muestra a continuación:
+
+```ino
+//LM35 Pin Variables
+int sensorPin = 0; //the analog pin the LM35's Vout (sense) pin is connected to
+                   //the resolution is 10 mV / degree centigrade with a
+                   
+ 
+/*
+ * setup() - this function runs once when you turn your Arduino on
+ * We initialize the serial connection with the computer
+ */
+
+void setup()
+{
+  Serial.begin(9600);  //Start the serial connection with the computer
+                       //to view the result open the serial monitor 
+}
+ 
+void loop()                     // run over and over again
+{
+ //getting the voltage reading from the temperature sensor
+ int reading = analogRead(sensorPin);  
+ 
+ // converting that reading to voltage, for 3.3v arduino use 3.3
+ float voltage = reading * 5.0;
+ voltage /= 1024.0; 
+ 
+ // print out the voltage
+ Serial.print(voltage); Serial.println(" volts");
+ 
+ // now print out the temperature
+ float temperatureC = (voltage) * 100 ;  //converting from 10 mv per degree
+                                               //to degrees ((voltage) times 100)
+ Serial.print(temperatureC); Serial.println(" degrees C");
+ 
+ // now convert to Fahrenheit
+ float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+ Serial.print(temperatureF); Serial.println(" degrees F");
+ 
+ delay(1000);                                     //waiting a second
+}
+```
+
+
+
+
+Teniendo en cuenta lo anterior, realizar las siguientes tareas:
+1. Montar y entender el programa anterior.
+2. Modificar el programa anterior de tal manera que la información que se despliega serialmente,en el ejemplo original, de la siguiente forma:
+
+   ```
+   ...
+   0.75 volts
+   74.71 degrees C
+   166.47 degrees F
+   ...
+   ```
+   Sea desplegada en el LCD de la siguiente forma (No es necesario que descomente la parte asociada al ejemplo serial):
+
+   ![salida](salida_lcd.png)
+
+3. Modifique el programa anterior de tal manera que permita modificar un valor umbral para la temperatura por medio de un potenciometro y que encienda un led y ponga a pitar un buzer cuando el valor leido supera el umbral. Asi mismo la salida se tiene que desplegar en tiempo real siguiendo el siguiente formato (Puede usar el serial para imprimir variables con el fin de verificar el correcto funcionamiento del programa):
+
+   ![umbral](salida_umbral.png)
+
+   Como se muestra en la figura anterior, en el display aparece un simbolo asterisco (**\***) cuando el valor de la temperatura medida supera el umbral, esto para indicar alarma.
+
+### Reto 2
+
+El siguiente circuito muestra un sistema electronico para controlar el giro de un motor mediante comandos seriales:
+
+![serial](Motor_L293D_serial.png)
+
+A continuación se muestra una versión modificada ([link simulacion](https://www.tinkercad.com/things/3kq6dLTffRo)) del programa de control de giro de motor usando un puente H mediante una implementación por maquinas de estado:
+
+```ino
+// Estados
+enum state {
+  STOP,
+  LEFT,
+  RIGHT
+};
+
+// int enablePin = 11;
+int in1Pin = 10;
+int in2Pin = 9;
+bool invalid_cmd = false;
+
+char cmd;  // Comando
+state estado_motor = STOP; // Estado actual del motor
+state prev_estado_motor = estado_motor; // Estado anterior del motor
+
+void setup() {
+  pinMode(in1Pin, OUTPUT);
+  pinMode(in2Pin, OUTPUT);
+  // digitalWrite(enablePin, LOW);
+  digitalWrite(in1Pin, LOW);
+  digitalWrite(in2Pin, LOW);
+  Serial.begin(9600);
+  while (!Serial);
+  Serial.println("**********************");
+  Serial.println("Motor control: ");
+  Serial.println("- PARAR: S");
+  Serial.println("- GIRO DERECHA: R");
+  Serial.println("- GIRO IZQUIERDA: L");
+  Serial.println("**********************");
+}
+
+void loop() {
+  if(Serial.available() > 0) {
+    // read the incoming byte
+    cmd = Serial.read();
+    prev_estado_motor = estado_motor; // Guardando el estado previo del motor
+    Serial.print("Received [");
+    Serial.print(cmd);
+    if(cmd) {
+      // ---- Transicion de estados ---- //
+      if(cmd == 'S' || cmd == 's') {
+        // Comando: S -> Detener motor
+        if(estado_motor == LEFT || estado_motor == RIGHT) {
+          // Cambio de estados: 
+          //    RIGHT -> STOP
+          //    LEFT -> STOP
+          estado_motor = STOP;
+        }
+      }
+      else if (cmd == 'R' || cmd == 'r') {
+        // Comando: R -> Girar motor a la derecha
+        if(estado_motor == STOP) {
+          // Cambio de estado: STOP -> RIGHT
+          estado_motor = RIGHT;
+        }
+        else if(estado_motor == LEFT) {
+          // Cambio de estado: LEFT -> RIGHT
+          estado_motor = RIGHT;
+        }        
+      }
+      else if (cmd == 'L' || cmd == 'l') {
+        // Comando: L -> Girar motor a la izquierda
+        if(estado_motor == STOP || estado_motor == RIGHT) {
+          // Cambio de estados: 
+          //    STOP -> LEFT
+          //    RIGHT -> LEFT
+          estado_motor = LEFT;
+        }
+      }
+      else {
+        // Comando invalido (Sigue ne le mismo estado)
+        invalid_cmd = true;
+        Serial.println("]: ERROR - Comando invalido");
+      }
+    }
+    // ---- Salidas segun el estado ---- //
+    
+    if((estado_motor != prev_estado_motor)) {
+      // Cuando el estado del motor cambia
+      switch(estado_motor) {       
+        case STOP:  
+          pararMotor();
+          Serial.println("]: Motor -> Detenido");
+          break;
+        case RIGHT:
+          if(prev_estado_motor == LEFT) {
+            pararMotor();
+          }
+          girarDerecha();
+          Serial.println("]: Motor -> Girando a la derecha");
+          break;
+        case LEFT:
+          if(prev_estado_motor == RIGHT) {
+            pararMotor();
+          }
+          girarIzquierda();
+          Serial.println("]: Motor -> Girando a la izquierda");
+          break;      
+      }
+      invalid_cmd = false;
+    }
+    else {
+      // El estado del motor no cambia
+      
+      if(invalid_cmd == true) {
+        invalid_cmd = false;
+      }
+      else {
+        Serial.println("]");        
+      }
+    }
+  }
+}
+```
+
+Teniendo en cuenta el codigo anterior:
+1. Monte el programa y entienda su funcionamiento. Analice con el profesor el diagrama de estados para que esto sea mas facil.
+2. Modifique el codigo para que imprima en un display LCD el estado del motor. 
 
 
 ## Referencias
